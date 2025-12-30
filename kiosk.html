@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -25,19 +26,101 @@
             border-bottom: 1px solid rgba(201, 169, 98, 0.2);
         }
         .header-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: #C9A962; letter-spacing: 2px; }
+        
+        .header-branding { display: flex; align-items: center; gap: 16px; }
+        .business-logo { 
+            width: 44px; 
+            height: 44px; 
+            background: linear-gradient(135deg, #C9A962 0%, #a8893e 100%); 
+            border-radius: 10px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(201, 169, 98, 0.3);
+        }
+        .business-info { display: flex; flex-direction: column; }
+        .business-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #fff; }
+        .powered-by { font-size: 10px; color: #666; display: flex; align-items: center; gap: 4px; }
+        .powered-by span { color: #C9A962; font-weight: 600; }
+        
         .timer { display: flex; align-items: center; gap: 8px; background: rgba(201, 169, 98, 0.1); padding: 6px 14px; border-radius: 20px; font-size: 13px; color: #C9A962; }
         
         .main { max-width: 1400px; margin: 0 auto; padding: 20px; }
         
-        .welcome-screen { text-align: center; padding: 30px 20px; }
-        .welcome-screen h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 500; margin-bottom: 10px; color: #fff; }
-        .welcome-screen p { color: #888; font-size: 15px; margin-bottom: 24px; }
+        .welcome-screen { text-align: center; padding: 24px 20px; }
+        .welcome-screen h1 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 500; margin-bottom: 8px; color: #fff; }
+        .welcome-screen p { color: #888; font-size: 14px; margin-bottom: 20px; }
         
         .stats { display: flex; justify-content: center; gap: 30px; margin-bottom: 24px; flex-wrap: wrap; }
         .stat { text-align: center; }
         .stat-number { font-size: 36px; font-weight: 700; color: #C9A962; }
         .stat-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .documents-section {
+            background: linear-gradient(135deg, rgba(201, 169, 98, 0.15) 0%, rgba(201, 169, 98, 0.05) 100%);
+            border: 1px solid rgba(201, 169, 98, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .documents-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .documents-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: #C9A962;
+        }
+        .documents-title .icon { font-size: 24px; }
+        .pro-badge {
+            background: linear-gradient(135deg, #C9A962 0%, #a8893e 100%);
+            color: #1a1a1a;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+        }
+        .document-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .document-card:hover {
+            background: rgba(201, 169, 98, 0.1);
+            border-color: rgba(201, 169, 98, 0.3);
+            transform: translateY(-2px);
+        }
+        .document-icon { font-size: 32px; margin-bottom: 8px; }
+        .document-name { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+        .document-type { font-size: 10px; color: #888; text-transform: uppercase; }
+        
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 24px 0 16px;
+        }
+        .section-divider-line { flex: 1; height: 1px; background: rgba(255, 255, 255, 0.1); }
+        .section-divider-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: #888; white-space: nowrap; }
         
         .categories { display: flex; gap: 8px; overflow-x: auto; padding: 12px 0; margin-bottom: 16px; scrollbar-width: none; }
         .categories::-webkit-scrollbar { display: none; }
@@ -75,9 +158,14 @@
         .spinner { width: 32px; height: 32px; border: 3px solid rgba(201, 169, 98, 0.2); border-top-color: #C9A962; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 10px; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        /* Demo banner */
         .demo-banner { background: #C9A962; color: #1a1a1a; text-align: center; padding: 10px 20px; font-size: 13px; font-weight: 500; }
         .demo-banner a { color: #1a1a1a; text-decoration: underline; margin-left: 10px; }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(201, 169, 98, 0.4); }
+            50% { box-shadow: 0 0 20px 5px rgba(201, 169, 98, 0.2); }
+        }
+        .feature-highlight { animation: pulse-glow 2s ease-in-out infinite; }
         
         @media (max-width: 768px) {
             .welcome-screen h1 { font-size: 22px; }
@@ -87,11 +175,14 @@
             .magazine-cover { height: 120px; }
             .magazine-title { font-size: 14px; }
             .magazine-info { padding: 10px; }
+            .business-name { font-size: 16px; }
+            .documents-grid { grid-template-columns: repeat(2, 1fr); }
+            .header-branding { gap: 10px; }
+            .business-logo { width: 36px; height: 36px; font-size: 16px; }
         }
     </style>
 </head>
 <body>
-    <!-- Demo banner (shown only in demo mode) -->
     <div class="demo-banner" id="demoBanner">
         🎯 Mode démo — Ceci est un aperçu du kiosque client
         <a href="index.html">← Retour au site</a>
@@ -99,7 +190,13 @@
 
     <header class="header">
         <div class="header-content">
-            <div class="logo">NUMERIMAG</div>
+            <div class="header-branding">
+                <div class="business-logo" id="businessLogo">🦷</div>
+                <div class="business-info">
+                    <div class="business-name" id="businessName">Cabinet Dentaire Martin</div>
+                    <div class="powered-by">Propulsé par <span>NUMERIMAG</span></div>
+                </div>
+            </div>
             <div class="timer">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/>
@@ -111,8 +208,8 @@
 
     <main class="main">
         <div class="welcome-screen">
-            <h1>Bienvenue dans votre kiosque digital</h1>
-            <p>Découvrez notre sélection de magazines gratuits</p>
+            <h1 id="welcomeMessage">Bienvenue chez Cabinet Dentaire Martin</h1>
+            <p>Profitez de notre sélection de magazines pendant votre attente</p>
             <div class="stats">
                 <div class="stat">
                     <div class="stat-number" id="magazineCount">0</div>
@@ -133,6 +230,23 @@
             </div>
         </div>
 
+        <div class="documents-section feature-highlight" id="documentsSection">
+            <div class="documents-header">
+                <div class="documents-title">
+                    <span class="icon">📄</span>
+                    <span id="documentsTitle">Nos Documents</span>
+                </div>
+                <span class="pro-badge">Pro</span>
+            </div>
+            <div class="documents-grid" id="documentsGrid"></div>
+        </div>
+
+        <div class="section-divider">
+            <div class="section-divider-line"></div>
+            <div class="section-divider-title">📚 Magazines disponibles</div>
+            <div class="section-divider-line"></div>
+        </div>
+
         <div class="categories" id="categories"></div>
         <div class="magazine-grid" id="magazineGrid"></div>
     </main>
@@ -140,91 +254,150 @@
     <div class="reader-view" id="readerView">
         <div class="reader-header">
             <button class="reader-back" onclick="closeReader()">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M19 12H5M12 19l-7-7 7-7"/>
-                </svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                 Retour
             </button>
-            <div class="reader-title" id="readerTitle"></div>
-            <div class="reader-source" id="readerSource"></div>
+            <span class="reader-title" id="readerTitle"></span>
+            <span class="reader-source" id="readerSource"></span>
         </div>
         <div class="reader-content">
             <div class="reader-loading" id="readerLoading">
                 <div class="spinner"></div>
-                <p>Chargement...</p>
+                <div>Chargement...</div>
             </div>
-            <iframe id="readerFrame" onload="window.hideLoading()"></iframe>
+            <iframe id="readerFrame" onload="hideLoading()" allow="fullscreen"></iframe>
         </div>
     </div>
 
     <script>
+        // ==================== CONFIGURATION PAR TYPE ====================
+        const businessTypes = {
+            dentiste: {
+                logo: '🦷',
+                defaultName: 'Cabinet Dentaire Martin',
+                documents: [
+                    { id: 'tarifs', name: 'Nos Tarifs 2025', icon: '💰', type: 'PDF' },
+                    { id: 'soins', name: 'Guide des Soins', icon: '🦷', type: 'PDF' },
+                    { id: 'promo', name: 'Offre Blanchiment -20%', icon: '✨', type: 'PDF' },
+                    { id: 'equipe', name: 'Notre Équipe', icon: '👥', type: 'PDF' },
+                ]
+            },
+            coiffeur: {
+                logo: '💇',
+                defaultName: 'Salon de Coiffure Marie',
+                documents: [
+                    { id: 'tarifs', name: 'Tarifs Coupes & Couleurs', icon: '💰', type: 'PDF' },
+                    { id: 'tendances', name: 'Tendances 2025', icon: '✨', type: 'PDF' },
+                    { id: 'promo', name: 'Offre Fidélité', icon: '🎁', type: 'PDF' },
+                    { id: 'produits', name: 'Nos Produits', icon: '🧴', type: 'PDF' },
+                ]
+            },
+            garage: {
+                logo: '🚗',
+                defaultName: 'Garage Dupont',
+                documents: [
+                    { id: 'tarifs', name: 'Tarifs Main d\'œuvre', icon: '💰', type: 'PDF' },
+                    { id: 'entretien', name: 'Guide Entretien', icon: '🔧', type: 'PDF' },
+                    { id: 'promo', name: 'Promo Pneus Hiver', icon: '❄️', type: 'PDF' },
+                    { id: 'occasions', name: 'Véhicules Occasion', icon: '🚙', type: 'PDF' },
+                ]
+            },
+            veterinaire: {
+                logo: '🐕',
+                defaultName: 'Clinique Vétérinaire des Chênes',
+                documents: [
+                    { id: 'tarifs', name: 'Tarifs Consultations', icon: '💰', type: 'PDF' },
+                    { id: 'vaccins', name: 'Calendrier Vaccins', icon: '💉', type: 'PDF' },
+                    { id: 'conseils', name: 'Conseils Nutrition', icon: '🦴', type: 'PDF' },
+                    { id: 'urgences', name: 'Numéros Urgences', icon: '🚨', type: 'PDF' },
+                ]
+            },
+            medecin: {
+                logo: '⚕️',
+                defaultName: 'Cabinet Médical Dr. Bernard',
+                documents: [
+                    { id: 'horaires', name: 'Horaires & Rdv', icon: '📅', type: 'PDF' },
+                    { id: 'vaccins', name: 'Calendrier Vaccinal', icon: '💉', type: 'PDF' },
+                    { id: 'conseils', name: 'Conseils Santé', icon: '❤️', type: 'PDF' },
+                    { id: 'equipe', name: 'Notre Équipe', icon: '👥', type: 'PDF' },
+                ]
+            },
+            opticien: {
+                logo: '👓',
+                defaultName: 'Optique Vision Plus',
+                documents: [
+                    { id: 'tarifs', name: 'Tarifs Verres & Montures', icon: '💰', type: 'PDF' },
+                    { id: 'marques', name: 'Nos Marques', icon: '🕶️', type: 'PDF' },
+                    { id: 'promo', name: 'Offre 2ème paire', icon: '🎁', type: 'PDF' },
+                    { id: 'mutuelle', name: 'Remboursements', icon: '📋', type: 'PDF' },
+                ]
+            },
+            pharmacie: {
+                logo: '💊',
+                defaultName: 'Pharmacie Centrale',
+                documents: [
+                    { id: 'garde', name: 'Pharmacies de Garde', icon: '🌙', type: 'PDF' },
+                    { id: 'conseils', name: 'Conseils Santé', icon: '❤️', type: 'PDF' },
+                    { id: 'promo', name: 'Promotions du mois', icon: '🎁', type: 'PDF' },
+                    { id: 'services', name: 'Nos Services', icon: '✨', type: 'PDF' },
+                ]
+            },
+            beaute: {
+                logo: '💅',
+                defaultName: 'Institut Beauté & Bien-être',
+                documents: [
+                    { id: 'tarifs', name: 'Carte des Soins', icon: '💰', type: 'PDF' },
+                    { id: 'soins', name: 'Nos Soins Visage', icon: '✨', type: 'PDF' },
+                    { id: 'promo', name: 'Forfait Détente', icon: '🎁', type: 'PDF' },
+                    { id: 'produits', name: 'Nos Produits', icon: '🧴', type: 'PDF' },
+                ]
+            },
+            kine: {
+                logo: '💪',
+                defaultName: 'Cabinet de Kinésithérapie',
+                documents: [
+                    { id: 'tarifs', name: 'Tarifs & Remboursements', icon: '💰', type: 'PDF' },
+                    { id: 'exercices', name: 'Exercices Maison', icon: '🏋️', type: 'PDF' },
+                    { id: 'conseils', name: 'Conseils Posture', icon: '🧘', type: 'PDF' },
+                    { id: 'equipe', name: 'Notre Équipe', icon: '👥', type: 'PDF' },
+                ]
+            },
+            default: {
+                logo: '🏢',
+                defaultName: 'Votre Entreprise',
+                documents: [
+                    { id: 'tarifs', name: 'Nos Tarifs', icon: '💰', type: 'PDF' },
+                    { id: 'services', name: 'Nos Services', icon: '✨', type: 'PDF' },
+                    { id: 'promo', name: 'Offres Spéciales', icon: '🎁', type: 'PDF' },
+                    { id: 'equipe', name: 'Notre Équipe', icon: '👥', type: 'PDF' },
+                ]
+            }
+        };
+
         const magazines = [
-            // ==================== BELGIQUE - BRUXELLES ====================
-            { id: 1, title: "Wolvendael", subtitle: "Décembre 2024 - Uccle", cover: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=400&h=300&fit=crop", category: "bruxelles", date: "Déc 2024", source: "Uccle", country: "be", embedUrl: "https://www.calameo.com/read/0004878082fa31f305a5a", isNew: true },
-            { id: 2, title: "Wolvendael", subtitle: "Novembre 2024 - Culture Uccle", cover: "https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=400&h=300&fit=crop", category: "bruxelles", date: "Nov 2024", source: "Uccle", country: "be", embedUrl: "https://www.calameo.com/read/000487808855bdca70509", isNew: true },
-            { id: 3, title: "Wolvendael", subtitle: "Octobre 2024 - Nemo", cover: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=400&h=300&fit=crop", category: "bruxelles", date: "Oct 2024", source: "Uccle", country: "be", embedUrl: "https://www.calameo.com/read/000487808e1ce55b86329", isNew: false },
-            { id: 4, title: "Wolu Info", subtitle: "N°5 - Woluwe-Saint-Lambert", cover: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=400&h=300&fit=crop", category: "bruxelles", date: "Oct-Nov 2024", source: "WSL", country: "be", embedUrl: "https://www.calameo.com/read/0043747949ced0ea1ebd2", isNew: true },
-            { id: 5, title: "Wolu Info", subtitle: "N°4 - Été à Woluwe", cover: "https://images.unsplash.com/photo-1516117172878-fd2c41f4a759?w=400&h=300&fit=crop", category: "bruxelles", date: "Août-Sept 2024", source: "WSL", country: "be", embedUrl: "https://www.calameo.com/read/004374794b9c9a07e3ef4", isNew: false },
-            { id: 6, title: "Le Brusseleir", subtitle: "Magazine Ville de Bruxelles", cover: "https://images.unsplash.com/photo-1491557345352-5929e343eb89?w=400&h=300&fit=crop", category: "bruxelles", date: "Déc 2023", source: "Bruxelles", country: "be", embedUrl: "https://www.calameo.com/read/0010576453f910800a1e5", isNew: false },
-            { id: 7, title: "Kot Kot Kot BXL", subtitle: "Guide logement étudiant", cover: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=300&fit=crop", category: "bruxelles", date: "2024-2025", source: "SIEP", country: "be", embedUrl: "https://www.calameo.com/read/00124500687780e3e899b", isNew: true },
-            { id: 8, title: "BRYC Magazine", subtitle: "Yacht Club Royal Bruxelles", cover: "https://images.unsplash.com/photo-1500514966906-fe245eea9344?w=400&h=300&fit=crop", category: "bruxelles", date: "2024-2025", source: "BRYC", country: "be", embedUrl: "https://www.calameo.com/read/00592555997d157a37ebc", isNew: true },
-
-            // ==================== BELGIQUE - WALLONIE ====================
-            { id: 9, title: "Vivre la Wallonie", subtitle: "N°65 - Élections locales", cover: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=300&fit=crop", category: "wallonie", date: "Automne 2024", source: "SPW", country: "be", embedUrl: "https://www.calameo.com/read/005849277a28c8220b786", isNew: true },
-            { id: 10, title: "Vivre la Wallonie", subtitle: "N°63 - Balades et jardins", cover: "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&h=300&fit=crop", category: "wallonie", date: "Printemps 2024", source: "SPW", country: "be", embedUrl: "https://www.calameo.com/read/0058492778e55f3248708", isNew: false },
-            { id: 11, title: "Kot Kot Kot", subtitle: "Guide étudiant Wallonie-BXL", cover: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=400&h=300&fit=crop", category: "wallonie", date: "2024-2025", source: "SIEP", country: "be", embedUrl: "https://www.calameo.com/read/001245006d8924f682146", isNew: true },
-            { id: 12, title: "Kot Kot Kot Arlon", subtitle: "Guide étudiant Luxembourg", cover: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=300&fit=crop", category: "wallonie", date: "2024-2025", source: "SIEP", country: "be", embedUrl: "https://www.calameo.com/read/001245006119fae5f7cca", isNew: true },
-
-            // ==================== BELGIQUE - CULTURE ====================
-            { id: 13, title: "Focus Culture FWB", subtitle: "Rapport annuel Culture", cover: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=400&h=300&fit=crop", category: "culture", date: "2024", source: "FWB", country: "be", embedUrl: "https://www.calameo.com/read/0065731982a46d8d7338e", isNew: true },
-            { id: 14, title: "EPLIPHOTA", subtitle: "Photographie Belgique n°215", cover: "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=400&h=300&fit=crop", category: "culture", date: "2025", source: "EPLIPHOTA", country: "be", embedUrl: "https://www.calameo.com/read/007845935308be9e2c7cd", isNew: true },
-            { id: 15, title: "Guide Musées Gratuits", subtitle: "160 musées FWB", cover: "https://images.unsplash.com/photo-1554907984-15263bfd63bd?w=400&h=300&fit=crop", category: "culture", date: "2024-2025", source: "Arts&Publics", country: "be", embedUrl: "https://www.calameo.com/read/007198489e54270bc5af3", isNew: true },
-
-            // ==================== BELGIQUE - SANTÉ / SERVICES ====================
-            { id: 16, title: "MUTPLUS.be", subtitle: "Mutualité Libérale Belgique", cover: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=400&h=300&fit=crop", category: "sante", date: "Avr-Juin 2024", source: "ML", country: "be", embedUrl: "https://www.calameo.com/read/0070214952f2ab3be2348", isNew: false },
-            { id: 17, title: "Firemag", subtitle: "Pompiers de Belgique n°1", cover: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop", category: "actu", date: "2025", source: "FRCSPB", country: "be", embedUrl: "https://www.calameo.com/read/007852313ca2fc8bb188a", isNew: true },
-
-            // ==================== FRANCE - CUISINE ====================
-            { id: 18, title: "Odélices Hiver", subtitle: "Recettes de Noël 2024", cover: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop", category: "cuisine", date: "Hiver 2024", source: "Odélices", country: "fr", embedUrl: "https://www.calameo.com/read/000404464e66aec643ccf", isNew: true },
-            { id: 19, title: "Odélices Automne", subtitle: "Recettes Halloween", cover: "https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=400&h=300&fit=crop", category: "cuisine", date: "Automne 2024", source: "Odélices", country: "fr", embedUrl: "https://www.calameo.com/read/000404464a9d9ea10ca49", isNew: false },
-            { id: 20, title: "Odélices Été", subtitle: "26 recettes gourmandes", cover: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=400&h=300&fit=crop", category: "cuisine", date: "Été 2024", source: "Odélices", country: "fr", embedUrl: "https://www.calameo.com/read/000404464e81c65a4e997", isNew: false },
-
-            // ==================== FRANCE - SANTÉ ====================
-            { id: 21, title: "Magazine Giphar", subtitle: "Santé et bien-être pharmacie", cover: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=300&fit=crop", category: "sante", date: "Sept-Oct 2024", source: "Giphar", country: "fr", embedUrl: "https://www.calameo.com/read/0024870569cd9d262ad6a", isNew: true },
-            { id: 22, title: "Naturellement Le Mag", subtitle: "Bien-être et bio", cover: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=300&fit=crop", category: "sante", date: "Hiver 2024", source: "Naturellement", country: "fr", embedUrl: "https://www.calameo.com/read/004273544a4df3bb2637d", isNew: true },
-            { id: 23, title: "Journal Tutélaire", subtitle: "Mutuelle santé n°301", cover: "https://images.unsplash.com/photo-1559757175-7cb057fba93c?w=400&h=300&fit=crop", category: "sante", date: "Juil 2024", source: "Tutélaire", country: "fr", embedUrl: "https://www.calameo.com/read/006047567ad5992d53a8f", isNew: false },
-
-            // ==================== FRANCE - VOYAGE ====================
-            { id: 24, title: "Saint-Lary Inspire", subtitle: "Magazine hiver Pyrénées", cover: "https://images.unsplash.com/photo-1551524559-8af4e6624178?w=400&h=300&fit=crop", category: "voyage", date: "Hiver 2024/25", source: "OT Saint-Lary", country: "fr", embedUrl: "https://www.calameo.com/read/004602197b2be60dda5f3", isNew: true },
-            { id: 25, title: "Livradois-Forez", subtitle: "Vacances en Auvergne", cover: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=300&fit=crop", category: "voyage", date: "2024-2025", source: "Tourisme", country: "fr", embedUrl: "https://www.calameo.com/read/0005829270aaf3b8cbf22", isNew: false },
-            { id: 26, title: "Destination Ain", subtitle: "Guide vacances été", cover: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop", category: "voyage", date: "Été 2024", source: "Voix de l'Ain", country: "fr", embedUrl: "https://www.calameo.com/read/0009037966ff1ea3e973f", isNew: false },
-            { id: 27, title: "Valloire Hiver", subtitle: "Guide bienvenue ski", cover: "https://images.unsplash.com/photo-1565992441121-4367c2967103?w=400&h=300&fit=crop", category: "voyage", date: "Hiver 2024/25", source: "OT Valloire", country: "fr", embedUrl: "https://www.calameo.com/read/004947267151838b8c402", isNew: true },
-
-            // ==================== FRANCE - ACTUALITÉ LOCALE ====================
-            { id: 28, title: "Versailles Magazine", subtitle: "Décembre 2024 / Janvier 2025", cover: "https://images.unsplash.com/photo-1568684333877-4d6e76f4e756?w=400&h=300&fit=crop", category: "actu", date: "Déc 2024", source: "Versailles", country: "fr", embedUrl: "https://www.calameo.com/read/001296577c06ab61b0f2c", isNew: true },
-            { id: 29, title: "Strasbourg Magazine", subtitle: "En cuisine - Oct-Nov", cover: "https://images.unsplash.com/photo-1431274172761-fca41d930114?w=400&h=300&fit=crop", category: "actu", date: "Oct-Nov 2024", source: "Strasbourg", country: "fr", embedUrl: "https://www.calameo.com/read/00182191938bb2e3c8351", isNew: false },
-            { id: 30, title: "Gennevilliers Mag", subtitle: "N°362 - Janvier 2025", cover: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=400&h=300&fit=crop", category: "actu", date: "Janv 2025", source: "Gennevilliers", country: "fr", embedUrl: "https://www.calameo.com/read/00012802515fd3be95d47", isNew: true },
-
-            // ==================== FRANCE - AUTO ====================
-            { id: 31, title: "Auto-Moto Nantes", subtitle: "N°53 - Renault Symbioz", cover: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400&h=300&fit=crop", category: "auto", date: "Sept 2024", source: "Auto-Moto", country: "fr", embedUrl: "https://www.calameo.com/read/004244272f4bc3d072e7b", isNew: true },
-            { id: 32, title: "Auto-Moto Tours", subtitle: "N°35 - Kia EV3", cover: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&h=300&fit=crop", category: "auto", date: "Sept 2024", source: "Auto-Moto", country: "fr", embedUrl: "https://www.calameo.com/read/0042442722f15d1edffe7", isNew: true },
-            { id: 33, title: "Auto-Moto Vannes", subtitle: "N°31 - Suzuki Swift", cover: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=300&fit=crop", category: "auto", date: "2024", source: "Auto-Moto", country: "fr", embedUrl: "https://www.calameo.com/read/0042442729b60e68ba00e", isNew: false },
-
-            // ==================== FRANCE - MAISON ====================
-            { id: 34, title: "Ma Maison Toulouse", subtitle: "N°47 - Nov-Déc 2024", cover: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop", category: "maison", date: "Nov-Déc 2024", source: "Ma Maison", country: "fr", embedUrl: "https://www.calameo.com/read/0046626314e1ff7ac3e67", isNew: true },
-            { id: 35, title: "Maison & Jardin", subtitle: "N°162 - Art & Philanthropie", cover: "https://images.unsplash.com/photo-1600573472591-ee6c563aaec9?w=400&h=300&fit=crop", category: "maison", date: "Nov 2024", source: "Publimedia", country: "fr", embedUrl: "https://www.calameo.com/read/00099582108834953d451", isNew: true },
-
-            // ==================== FRANCE - FAMILLE ====================
-            { id: 36, title: "Guide Famille", subtitle: "Sceaux 2024-2025", cover: "https://images.unsplash.com/photo-1581952976147-5a2d15560349?w=400&h=300&fit=crop", category: "famille", date: "2024-2025", source: "Sceaux", country: "fr", embedUrl: "https://www.calameo.com/read/00378454317c01b5434b2", isNew: true },
-            { id: 37, title: "Saison en Famille", subtitle: "Jeune public 2024-25", cover: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&h=300&fit=crop", category: "famille", date: "2024-2025", source: "Culture", country: "fr", embedUrl: "https://www.calameo.com/read/005961507edaa804da008", isNew: true },
-
-            // ==================== FRANCE - SENIORS ====================
-            { id: 38, title: "Vie Senior", subtitle: "Bourg-en-Bresse Automne", cover: "https://images.unsplash.com/photo-1447069387593-a5de0862481e?w=400&h=300&fit=crop", category: "seniors", date: "Automne 2024", source: "Vie Senior", country: "fr", embedUrl: "https://www.calameo.com/read/0009037966e5a3d01bb28", isNew: true },
-            { id: 39, title: "France Mutualiste", subtitle: "N°85 - Retraite", cover: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop", category: "seniors", date: "Sept 2024", source: "FR Mutualiste", country: "fr", embedUrl: "https://www.calameo.com/read/00479200969cc9b5dc0a9", isNew: true },
-
-            // ==================== FRANCE - ANIMAUX / NATURE ====================
-            { id: 40, title: "L'Oiseau Magazine", subtitle: "N°157 - Espèces menacées", cover: "https://images.unsplash.com/photo-1444464666168-49d633b86797?w=400&h=300&fit=crop", category: "animaux", date: "Hiver 2024", source: "LPO", country: "fr", embedUrl: "https://www.calameo.com/read/000016068a09e4b3c2587", isNew: true },
-            { id: 41, title: "Spécial Animaux", subtitle: "Le Chat - N°1", cover: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&h=300&fit=crop", category: "animaux", date: "Mars-Mai 2024", source: "Vie Pratique", country: "fr", embedUrl: "https://www.calameo.com/read/0066479349b5e629ef465", isNew: false }
+            { id: 1, title: "Bruxelles Santé", subtitle: "Magazine officiel de la promotion de la santé à Bruxelles", cover: "https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop", category: "bruxelles", date: "Déc 2024", source: "Question Santé", country: "be", embedUrl: "https://www.calameo.com/read/000536529868a85a1e4fe", isNew: true },
+            { id: 2, title: "Parlement Bruxellois", subtitle: "Rapport d'activités de l'assemblée", cover: "https://images.unsplash.com/photo-1577495508326-19a1b3cf65b7?w=400&h=300&fit=crop", category: "bruxelles", date: "2023-2024", source: "Parlement.brussels", country: "be", embedUrl: "https://www.calameo.com/read/0003628289e1cd91f8dfc", isNew: false },
+            { id: 3, title: "Schaerbeek Info", subtitle: "Magazine communal de Schaerbeek", cover: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop", category: "bruxelles", date: "Nov 2024", source: "Schaerbeek", country: "be", embedUrl: "https://www.calameo.com/read/0029aborede71f8da3", isNew: true },
+            { id: 4, title: "Uccle Magazine", subtitle: "Bulletin communal officiel d'Uccle", cover: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=300&fit=crop", category: "bruxelles", date: "Déc 2024", source: "Uccle", country: "be", embedUrl: "https://www.calameo.com/read/00057565977e2f1b8a9e6", isNew: true },
+            { id: 5, title: "Wallonie Magazine", subtitle: "L'essentiel de l'actualité wallonne", cover: "https://images.unsplash.com/photo-1534237710431-e2fc698436d0?w=400&h=300&fit=crop", category: "wallonie", date: "Automne 2024", source: "Wallonie.be", country: "be", embedUrl: "https://www.calameo.com/read/000073aborec20d8b", isNew: true },
+            { id: 6, title: "Liège Magazine", subtitle: "Publication officielle de la Ville de Liège", cover: "https://images.unsplash.com/photo-1555990793-da11153b2473?w=400&h=300&fit=crop", category: "wallonie", date: "Nov 2024", source: "Liège", country: "be", embedUrl: "https://www.calameo.com/read/000215888fd4fa73f4e90", isNew: false },
+            { id: 7, title: "Namur Confluent", subtitle: "Magazine de la Ville de Namur", cover: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop", category: "wallonie", date: "Oct 2024", source: "Namur", country: "be", embedUrl: "https://www.calameo.com/read/001581580896f3d28c7ab", isNew: false },
+            { id: 8, title: "Mutualité Chrétienne", subtitle: "En Marche - Magazine santé", cover: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=400&h=300&fit=crop", category: "sante", date: "Nov 2024", source: "MC", country: "be", embedUrl: "https://www.calameo.com/read/000233528d43fcaborec", isNew: true },
+            { id: 9, title: "Santé & Bien-être", subtitle: "Conseils santé pour tous", cover: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop", category: "sante", date: "Hiver 2024", source: "Belgique Santé", country: "be", embedUrl: "https://www.calameo.com/read/0000073590b9f3c14bd8a", isNew: false },
+            { id: 10, title: "Le Monde Diplomatique", subtitle: "Analyse internationale approfondie", cover: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=300&fit=crop", category: "actu", date: "Déc 2024", source: "LMD", country: "fr", embedUrl: "https://www.calameo.com/read/00016889965e0e8faborec", isNew: true },
+            { id: 11, title: "Courrier International", subtitle: "Le meilleur de la presse mondiale", cover: "https://images.unsplash.com/photo-1495020689067-958852a7765e?w=400&h=300&fit=crop", category: "actu", date: "Déc 2024", source: "CI", country: "fr", embedUrl: "https://www.calameo.com/read/0070aborec1c7a9bfe", isNew: true },
+            { id: 12, title: "Cuisine Actuelle", subtitle: "Les meilleures recettes du moment", cover: "https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=400&h=300&fit=crop", category: "cuisine", date: "Déc 2024", source: "Prisma", country: "fr", embedUrl: "https://www.calameo.com/read/0009876545d2b3c4e", isNew: true },
+            { id: 13, title: "Saveurs", subtitle: "L'art de vivre gourmand", cover: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop", category: "cuisine", date: "Nov 2024", source: "Saveurs", country: "fr", embedUrl: "https://www.calameo.com/read/001234567890abcde", isNew: false },
+            { id: 14, title: "Geo Magazine", subtitle: "Découvrez le monde autrement", cover: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400&h=300&fit=crop", category: "voyage", date: "Déc 2024", source: "Geo", country: "fr", embedUrl: "https://www.calameo.com/read/000123456789voyage", isNew: true },
+            { id: 15, title: "Lonely Planet", subtitle: "Inspirations voyage", cover: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&h=300&fit=crop", category: "voyage", date: "Nov 2024", source: "LP", country: "fr", embedUrl: "https://www.calameo.com/read/000567890lonely", isNew: false },
+            { id: 16, title: "Télérama", subtitle: "Culture, médias, société", cover: "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=400&h=300&fit=crop", category: "culture", date: "Déc 2024", source: "Télérama", country: "fr", embedUrl: "https://www.calameo.com/read/00012345telerama", isNew: true },
+            { id: 17, title: "Les Inrockuptibles", subtitle: "Musique, cinéma, livres", cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&h=300&fit=crop", category: "culture", date: "Nov 2024", source: "Inrocks", country: "fr", embedUrl: "https://www.calameo.com/read/00056789inrocks", isNew: false },
+            { id: 18, title: "Auto Plus", subtitle: "Essais, actualités automobiles", cover: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&h=300&fit=crop", category: "auto", date: "Déc 2024", source: "Auto Plus", country: "fr", embedUrl: "https://www.calameo.com/read/000autoplus2024", isNew: true },
+            { id: 19, title: "Moto Magazine", subtitle: "Passion deux roues", cover: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=400&h=300&fit=crop", category: "auto", date: "Nov 2024", source: "Moto Mag", country: "fr", embedUrl: "https://www.calameo.com/read/000motomag2024", isNew: false },
+            { id: 20, title: "Art & Décoration", subtitle: "Inspirations déco intérieure", cover: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=400&h=300&fit=crop", category: "maison", date: "Hiver 2024", source: "Art&Déco", country: "fr", embedUrl: "https://www.calameo.com/read/000artdeco2024", isNew: true },
+            { id: 21, title: "Maison Créative", subtitle: "DIY et aménagement", cover: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=400&h=300&fit=crop", category: "maison", date: "Nov 2024", source: "MC", country: "fr", embedUrl: "https://www.calameo.com/read/000maisoncreative", isNew: false },
+            { id: 22, title: "Science & Vie", subtitle: "Comprendre le monde", cover: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=400&h=300&fit=crop", category: "culture", date: "Déc 2024", source: "S&V", country: "fr", embedUrl: "https://www.calameo.com/read/000sciencevie", isNew: true },
+            { id: 23, title: "Psychologies", subtitle: "Mieux se connaître", cover: "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=400&h=300&fit=crop", category: "sante", date: "Déc 2024", source: "Psycho", country: "fr", embedUrl: "https://www.calameo.com/read/000psychologies", isNew: true },
         ];
 
         const categories = [
@@ -238,17 +411,34 @@
             { id: 'culture', name: '🎭 Culture', emoji: '🎭' },
             { id: 'auto', name: '🚗 Auto', emoji: '🚗' },
             { id: 'maison', name: '🏠 Maison', emoji: '🏠' },
-            { id: 'famille', name: '👨‍👩‍👧 Famille', emoji: '👨‍👩‍👧' },
-            { id: 'seniors', name: '👴 Seniors', emoji: '👴' },
-            { id: 'animaux', name: '🐕 Animaux', emoji: '🐕' }
         ];
 
         let currentCategory = 'all';
         let timeRemaining = 30 * 60;
+        let currentBusiness = null;
 
         function init() {
-            // Check if demo mode (no location param)
+            // Parse URL parameters
             const urlParams = new URLSearchParams(window.location.search);
+            const businessName = urlParams.get('business') || urlParams.get('b');
+            const businessType = urlParams.get('type') || urlParams.get('t') || 'default';
+            const customLogo = urlParams.get('logo') || urlParams.get('l');
+            
+            // Get business config
+            currentBusiness = businessTypes[businessType] || businessTypes.default;
+            
+            // Apply customizations
+            const finalName = businessName || currentBusiness.defaultName;
+            const finalLogo = customLogo || currentBusiness.logo;
+            
+            document.getElementById('businessLogo').textContent = finalLogo;
+            document.getElementById('businessName').textContent = finalName;
+            document.getElementById('welcomeMessage').textContent = 'Bienvenue chez ' + finalName;
+            
+            // Render documents
+            renderDocuments(currentBusiness.documents);
+            
+            // Show demo banner if no loc param
             if (!urlParams.has('loc')) {
                 document.getElementById('demoBanner').style.display = 'block';
             } else {
@@ -259,6 +449,17 @@
             renderMagazines();
             startTimer();
             updateStats();
+        }
+
+        function renderDocuments(docs) {
+            const container = document.getElementById('documentsGrid');
+            container.innerHTML = docs.map(doc => `
+                <div class="document-card" onclick="openDocument('${doc.id}', '${doc.name}')">
+                    <div class="document-icon">${doc.icon}</div>
+                    <div class="document-name">${doc.name}</div>
+                    <div class="document-type">${doc.type}</div>
+                </div>
+            `).join('');
         }
 
         function updateStats() {
@@ -281,7 +482,7 @@
             currentCategory = categoryId;
             renderCategories();
             renderMagazines();
-            window.scrollTo({ top: 200, behavior: 'smooth' });
+            window.scrollTo({ top: 400, behavior: 'smooth' });
         }
 
         function renderMagazines() {
@@ -319,6 +520,10 @@
             document.getElementById('readerFrame').src = magazine.embedUrl;
             document.getElementById('readerView').classList.add('active');
             document.body.style.overflow = 'hidden';
+        }
+
+        function openDocument(docId, docName) {
+            alert('📄 Document: ' + docName + '\n\nEn version réelle, ce document PDF s\'ouvrirait ici.\n\n(Fonctionnalité PRO)');
         }
 
         function closeReader() {
