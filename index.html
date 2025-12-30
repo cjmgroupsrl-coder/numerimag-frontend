@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Numerimag — Kiosque Digital pour salles d'attente</title>
+  <meta name="description" content="Remplacez vos magazines papier par un kiosque digital élégant. Solution clé en main pour salles d'attente : commerces, cabinets, salons...">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: #1a1a1a; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; font-family: inherit; }
+    
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      padding: 16px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .logo-container { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo-icon { width: 45px; height: 50px; }
+    .logo-text { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 24px; font-weight: 600; color: #1a1a1a; display: block; }
+    .logo-slogan { font-size: 9px; color: #C9A962; letter-spacing: 2px; font-weight: 500; display: block; }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a { font-size: 14px; font-weight: 500; transition: opacity 0.2s; }
+    .nav-links a:hover { opacity: 0.7; }
+    .btn-primary { background: #1a1a1a; color: white; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; transition: all 0.2s; }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; z-index: 1001; }
+    .hamburger span { width: 24px; height: 2.5px; background: #1a1a1a; border-radius: 2px; transition: all 0.3s; }
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+    .mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 999; flex-direction: column; justify-content: center; align-items: center; gap: 24px; }
+    .mobile-menu.active { display: flex; }
+    .mobile-menu a { font-size: 24px; font-weight: 600; padding: 16px 32px; }
+    
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 120px 40px 80px;
+      background: linear-gradient(180deg, #F8F6F0 0%, white 100%);
+    }
+    .hero-container { max-width: 1200px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .hero-badge { display: inline-block; background: rgba(201,169,98,0.2); color: #C9A962; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 24px; }
+    .hero h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 52px; font-weight: 600; line-height: 1.1; margin-bottom: 24px; }
+    .hero h1 span { color: #C9A962; }
+    .hero-text { font-size: 18px; color: #666; line-height: 1.7; margin-bottom: 16px; }
+    .hero-sectors { font-size: 15px; color: #888; margin-bottom: 40px; font-style: italic; }
+    .hero-buttons { display: flex; gap: 16px; margin-bottom: 48px; flex-wrap: wrap; }
+    .btn-large { padding: 18px 36px; border-radius: 12px; font-weight: 600; font-size: 16px; display: inline-flex; align-items: center; gap: 10px; transition: all 0.2s; }
+    .btn-large.primary { background: #1a1a1a; color: white; }
+    .btn-large.outline { background: transparent; color: #1a1a1a; border: 2px solid #1a1a1a; }
+    .btn-large:hover { transform: translateY(-2px); }
+    .hero-stats { display: flex; gap: 40px; flex-wrap: wrap; }
+    .stat .number { font-size: 32px; font-weight: 700; }
+    .stat .label { font-size: 14px; color: #888; }
+    
+    .phone-mockup { width: 300px; height: 600px; background: #1a1a1a; border-radius: 40px; padding: 12px; box-shadow: 0 40px 80px rgba(0,0,0,0.2); margin: 0 auto; }
+    .phone-screen { width: 100%; height: 100%; background: #242424; border-radius: 32px; overflow: hidden; }
+    .phone-header { padding: 20px; text-align: center; border-bottom: 1px solid rgba(201,169,98,0.2); }
+    .phone-logo { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: #C9A962; }
+    .phone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 16px; }
+    .phone-mag { height: 100px; background: #333; border-radius: 8px; overflow: hidden; }
+    .phone-mag img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .section { padding: 120px 40px; }
+    .section.alt { background: #F8F6F0; }
+    .section-header { text-align: center; margin-bottom: 80px; max-width: 700px; margin-left: auto; margin-right: auto; }
+    .section-header h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 44px; font-weight: 600; margin-bottom: 16px; }
+    .section-header p { color: #666; font-size: 18px; }
+    
+    .grid-3 { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+    .card { padding: 40px; background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    .card .icon { font-size: 40px; margin-bottom: 20px; }
+    .card h3 { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
+    .card p { color: #666; line-height: 1.6; }
+    .card-pro { position: relative; border: 2px solid #C9A962; }
+    .badge-pro { position: absolute; top: -10px; right: 20px; background: #C9A962; color: #1a1a1a; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 12px; }
+    
+    .steps { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; }
+    .step { text-align: center; }
+    .step-number { width: 80px; height: 80px; background: #C9A962; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 32px; font-weight: 700; color: white; font-family: 'Cormorant Garamond', Georgia, serif; }
+    .step h3 { font-size: 22px; font-weight: 600; margin-bottom: 12px; }
+    .step p { color: #666; line-height: 1.6; }
+    
+    .pricing-card { max-width: 500px; margin: 0 auto; background: white; border-radius: 24px; padding: 60px; text-align: center; border: 2px solid #C9A962; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
+    .pricing-badge { display: inline-block; background: #C9A962; color: white; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 24px; }
+    .pricing-amount .price { font-size: 64px; font-weight: 700; font-family: 'Cormorant Garamond', Georgia, serif; }
+    .pricing-amount .period { font-size: 24px; color: #666; }
+    .pricing-note { color: #666; margin: 24px 0 40px; font-size: 16px; }
+    .features-list { text-align: left; max-width: 320px; margin: 0 auto 40px; }
+    .feature-item { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; font-size: 16px; }
+    .feature-item .check { color: #C9A962; font-size: 20px; }
+    
+    .quote-card { max-width: 550px; margin: 0 auto; background: white; border-radius: 24px; padding: 50px; text-align: center; border: 2px solid #C9A962; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
+    .quote-icon { font-size: 48px; margin-bottom: 20px; }
+    .quote-card h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; font-weight: 600; margin-bottom: 16px; }
+    .quote-card > p { color: #666; line-height: 1.7; margin-bottom: 30px; }
+    .quote-features { display: flex; justify-content: center; gap: 24px; margin-bottom: 30px; flex-wrap: wrap; }
+    .quote-feature { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
+    .quote-feature span { color: #C9A962; font-size: 18px; }
+    
+    .cta-section { padding: 120px 40px; background: #1a1a1a; color: white; text-align: center; }
+    .cta-section h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 44px; font-weight: 600; margin-bottom: 24px; }
+    .cta-section p { font-size: 18px; opacity: 0.8; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
+    .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-gold { background: #C9A962; color: #1a1a1a; padding: 18px 36px; border-radius: 12px; font-weight: 600; font-size: 16px; }
+    .btn-outline-white { background: transparent; color: white; border: 2px solid white; padding: 18px 36px; border-radius: 12px; font-weight: 600; font-size: 16px; }
+    .sectors-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 40px; }
+    .sector-tag { background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 25px; font-size: 14px; }
+    
+    footer { padding: 60px 40px; background: #0a0a0a; color: white; }
+    .footer-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: #C9A962; display: flex; align-items: center; gap: 10px; }
+    .footer-links { display: flex; gap: 32px; }
+    .footer-links a { color: white; opacity: 0.7; font-size: 14px; }
+    .footer-links a:hover { opacity: 1; }
+    .footer-legal { display: flex; gap: 24px; width: 100%; justify-content: center; margin-top: 20px; }
+    .footer-legal a { color: white; opacity: 0.5; font-size: 12px; }
+    .footer-legal a:hover { opacity: 0.8; }
+    .footer-copy { opacity: 0.5; font-size: 14px; width: 100%; text-align: center; margin-top: 40px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); }
+    
+    /* Pricing Grid */
+    .pricing-grid { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
+    .pricing-card-new { background: white; border-radius: 20px; padding: 40px; position: relative; border: 2px solid #e0e0e0; transition: all 0.3s; }
+    .pricing-card-new:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    .pricing-card-new.popular { border-color: #C9A962; }
+    .popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #C9A962; color: white; padding: 6px 20px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .pricing-header h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; font-weight: 600; margin-bottom: 4px; }
+    .pricing-desc { color: #888; font-size: 14px; margin-bottom: 20px; }
+    .pricing-price { margin-bottom: 30px; display: flex; align-items: baseline; gap: 2px; }
+    .price-amount { font-size: 56px; font-weight: 700; font-family: 'Cormorant Garamond', Georgia, serif; }
+    .price-currency { font-size: 28px; font-weight: 600; }
+    .price-period { font-size: 16px; color: #888; margin-left: 8px; }
+    .pricing-features { list-style: none; margin-bottom: 30px; }
+    .pricing-features li { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 15px; }
+    .pricing-features li:last-child { border-bottom: none; }
+    .pricing-features li.disabled { color: #bbb; }
+    .pricing-features .check { color: #2ecc71; font-weight: bold; }
+    .pricing-features .check.gold { color: #C9A962; }
+    .pricing-features .cross { color: #ccc; }
+    .btn-pricing { width: 100%; padding: 16px; border-radius: 10px; font-size: 16px; font-weight: 600; background: #1a1a1a; color: white; transition: all 0.2s; }
+    .btn-pricing:hover { opacity: 0.9; transform: translateY(-2px); }
+    .btn-pricing.gold { background: #C9A962; color: #1a1a1a; }
+    .btn-pricing:disabled { background: #ccc; cursor: not-allowed; }
+    .pricing-note-bottom { text-align: center; color: #888; font-size: 14px; margin-top: 40px; }
+    
+    @media (max-width: 700px) {
+      .pricing-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Cookie Banner */
+    .cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; background: #1a1a1a; color: white; padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; gap: 20px; z-index: 9999; box-shadow: 0 -4px 20px rgba(0,0,0,0.3); flex-wrap: wrap; }
+    .cookie-banner.hidden { display: none; }
+    .cookie-text { flex: 1; font-size: 14px; line-height: 1.5; }
+    .cookie-text a { color: #C9A962; }
+    .cookie-buttons { display: flex; gap: 12px; }
+    .cookie-btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+    .cookie-btn.accept { background: #C9A962; color: #1a1a1a; }
+    .cookie-btn.accept:hover { background: #b8954d; }
+    .cookie-btn.decline { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.3); }
+    .cookie-btn.decline:hover { border-color: white; }
+    
+    /* Dashboard preview */
+    .dashboard-preview { background: #F8F6F0; }
+    .dashboard-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; align-items: center; }
+    .dashboard-features { display: flex; flex-direction: column; gap: 24px; }
+    .dash-feature { display: flex; gap: 16px; align-items: flex-start; }
+    .dash-icon { width: 50px; height: 50px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); flex-shrink: 0; }
+    .dash-feature h4 { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
+    .dash-feature p { font-size: 14px; color: #666; line-height: 1.5; }
+    .dash-feature-pro { background: linear-gradient(135deg, rgba(201,169,98,0.1) 0%, rgba(201,169,98,0.05) 100%); border-radius: 12px; padding: 16px; margin: -16px; margin-top: 8px; }
+    .badge-pro-small { background: #C9A962; color: #1a1a1a; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 8px; margin-left: 8px; vertical-align: middle; }
+    
+    .mockup-window { background: #1a1a1a; border-radius: 12px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.2); }
+    .mockup-header { background: #2d2d2d; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+    .mockup-dots { display: flex; gap: 6px; }
+    .mockup-dots span { width: 10px; height: 10px; border-radius: 50%; background: #ff5f57; }
+    .mockup-dots span:nth-child(2) { background: #ffbd2e; }
+    .mockup-dots span:nth-child(3) { background: #28ca41; }
+    .mockup-url { flex: 1; text-align: center; font-size: 11px; color: #888; background: #1a1a1a; padding: 6px 12px; border-radius: 6px; }
+    .mockup-content { display: flex; min-height: 280px; }
+    .mockup-sidebar { width: 60px; background: #242424; padding: 16px 10px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .mockup-logo { width: 36px; height: 36px; background: #C9A962; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-weight: 700; color: #1a1a1a; margin-bottom: 12px; }
+    .mockup-nav-item { width: 36px; height: 36px; background: #333; border-radius: 8px; }
+    .mockup-nav-item.active { background: rgba(201,169,98,0.2); }
+    .mockup-main { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+    .mockup-stats { display: flex; gap: 12px; }
+    .mockup-stat { flex: 1; background: #242424; border-radius: 10px; padding: 14px; text-align: center; }
+    .mockup-stat-num { font-size: 20px; font-weight: 700; color: #C9A962; }
+    .mockup-stat-label { font-size: 9px; color: #888; margin-top: 4px; }
+    .mockup-qr { background: #242424; border-radius: 10px; padding: 16px; display: flex; align-items: center; gap: 16px; }
+    .mockup-qr-code { width: 50px; height: 50px; background: white; border-radius: 6px; background-image: linear-gradient(45deg, #1a1a1a 25%, transparent 25%), linear-gradient(-45deg, #1a1a1a 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #1a1a1a 75%), linear-gradient(-45deg, transparent 75%, #1a1a1a 75%); background-size: 10px 10px; background-position: 0 0, 0 5px, 5px -5px, -5px 0px; }
+    .mockup-qr-text { font-size: 12px; color: #888; }
+    .mockup-docs { background: #242424; border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(201,169,98,0.3); }
+    .mockup-docs-icon { font-size: 18px; }
+    .mockup-docs-text { font-size: 11px; color: #C9A962; flex: 1; }
+    .mockup-docs-badge { background: #C9A962; color: #1a1a1a; font-size: 8px; font-weight: 700; padding: 2px 6px; border-radius: 6px; }
+    .mockup-chart { background: #242424; border-radius: 10px; padding: 16px; display: flex; align-items: flex-end; gap: 8px; height: 80px; }
+    .mockup-bar { flex: 1; background: linear-gradient(180deg, #C9A962 0%, rgba(201,169,98,0.3) 100%); border-radius: 4px 4px 0 0; }
+    
+    /* Contact Form */
+    .contact-form-card { max-width: 700px; margin: 0 auto; background: white; border-radius: 24px; padding: 50px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
+    .contact-form { display: flex; flex-direction: column; gap: 20px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group.full-width { grid-column: span 2; }
+    .form-group label { font-size: 14px; font-weight: 600; color: #333; }
+    .form-group input, .form-group select, .form-group textarea { padding: 14px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 15px; font-family: inherit; transition: border-color 0.2s; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #C9A962; }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: #aaa; }
+    .form-note { text-align: center; font-size: 12px; color: #888; margin-top: 10px; }
+    .vat-status { font-size: 12px; margin-top: 4px; }
+    .vat-status.valid { color: #27ae60; }
+    .vat-status.invalid { color: #e74c3c; }
+    .vat-status.checking { color: #f39c12; }
+    
+    /* FAQ */
+    .faq-container { max-width: 800px; margin: 0 auto; }
+    .faq-item { background: white; border-radius: 16px; margin-bottom: 16px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border: 2px solid transparent; transition: border-color 0.3s; }
+    .faq-item:hover { border-color: #e0e0e0; }
+    .faq-item.active { border-color: #C9A962; }
+    .faq-question { padding: 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; gap: 16px; }
+    .faq-question h3 { font-size: 17px; font-weight: 600; margin: 0; flex: 1; }
+    .faq-icon { width: 32px; height: 32px; background: #f5f5f5; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #C9A962; transition: all 0.3s; flex-shrink: 0; }
+    .faq-item.active .faq-icon { background: #C9A962; color: white; transform: rotate(45deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .faq-item.active .faq-answer { max-height: 200px; }
+    .faq-answer p { padding: 0 24px 24px; color: #666; line-height: 1.7; margin: 0; }
+    
+    /* Demo Animation - Option C */
+    .demo-section { background: #1a1a1a; color: white; }
+    .demo-section .section-header h2 { color: white; }
+    .demo-section .section-header p { color: rgba(255,255,255,0.6); }
+    .demo-container { display: flex; flex-direction: column; align-items: center; }
+    
+    .demo-phone-realistic { width: 280px; height: 580px; background: #0a0a0a; border-radius: 45px; padding: 10px; position: relative; box-shadow: 0 30px 80px rgba(0,0,0,0.6), inset 0 0 0 2px #333; }
+    .demo-notch { width: 100px; height: 28px; background: #0a0a0a; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); border-radius: 0 0 18px 18px; z-index: 20; }
+    .demo-screen { width: 100%; height: 100%; background: #fff; border-radius: 38px; overflow: hidden; position: relative; }
+    
+    .finger { width: 45px; height: 45px; background: radial-gradient(circle at 30% 30%, #ffdbac, #e0a87e); border-radius: 50%; position: absolute; z-index: 100; opacity: 0; pointer-events: none; box-shadow: 0 5px 20px rgba(0,0,0,0.3); transition: opacity 0.3s, left 0.5s ease, top 0.5s ease; }
+    .finger.visible { opacity: 1; }
+    .finger.tap { animation: tapPulse 0.3s ease; }
+    @keyframes tapPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(0.85); } }
+    
+    .demo-scene { position: absolute; inset: 0; opacity: 0; transition: opacity 0.5s; }
+    .demo-scene.active { opacity: 1; }
+    
+    /* Scene 1: Camera */
+    .camera-view { width: 100%; height: 100%; background: linear-gradient(180deg, #2c3e50 0%, #1a252f 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .camera-frame { width: 180px; height: 180px; border: 3px solid rgba(255,255,255,0.6); border-radius: 16px; position: relative; display: flex; align-items: center; justify-content: center; }
+    .camera-corner { position: absolute; width: 25px; height: 25px; border: 3px solid #C9A962; }
+    .camera-corner.tl { top: -3px; left: -3px; border-right: none; border-bottom: none; border-radius: 6px 0 0 0; }
+    .camera-corner.tr { top: -3px; right: -3px; border-left: none; border-bottom: none; border-radius: 0 6px 0 0; }
+    .camera-corner.bl { bottom: -3px; left: -3px; border-right: none; border-top: none; border-radius: 0 0 0 6px; }
+    .camera-corner.br { bottom: -3px; right: -3px; border-left: none; border-top: none; border-radius: 0 0 6px 0; }
+    .qr-in-frame { width: 110px; height: 110px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; animation: qrAppear 0.5s ease 0.8s forwards; opacity: 0; transform: scale(0.8); }
+    @keyframes qrAppear { to { opacity: 1; transform: scale(1); } }
+    .qr-pattern-demo { width: 70px; height: 70px; background-image: linear-gradient(45deg, #1a1a1a 25%, transparent 25%), linear-gradient(-45deg, #1a1a1a 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #1a1a1a 75%), linear-gradient(-45deg, transparent 75%, #1a1a1a 75%); background-size: 14px 14px; border-radius: 6px; position: relative; }
+    .qr-pattern-demo::after { content: 'N'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 20px; background: #C9A962; width: 26px; height: 26px; margin: auto; border-radius: 5px; color: #1a1a1a; }
+    .scan-success { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px; border: 4px solid #2ecc71; border-radius: 20px; opacity: 0; }
+    .scan-success.show { animation: successFlash 0.5s ease forwards; }
+    @keyframes successFlash { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); } 50% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.1); } }
+    .camera-hint { color: rgba(255,255,255,0.6); font-size: 13px; margin-top: 24px; }
+    
+    /* Scene 2: Loading */
+    .loading-screen { width: 100%; height: 100%; background: #1a1a1a; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .loading-logo-anim { width: 70px; height: 70px; background: #C9A962; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 32px; color: #1a1a1a; animation: logoPulse 1s ease-in-out infinite; }
+    @keyframes logoPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    .loading-text { color: #C9A962; font-size: 13px; margin-top: 18px; }
+    .loading-bar-anim { width: 130px; height: 4px; background: #333; border-radius: 2px; margin-top: 14px; overflow: hidden; }
+    .loading-fill { height: 100%; background: #C9A962; width: 0%; animation: loadFill 2s ease forwards; }
+    @keyframes loadFill { to { width: 100%; } }
+    
+    /* Scene 3: Kiosk */
+    .kiosk-screen { width: 100%; height: 100%; background: #f5f5f5; overflow: hidden; }
+    .kiosk-header-demo { background: #1a1a1a; padding: 45px 14px 14px; display: flex; justify-content: space-between; align-items: center; }
+    .kiosk-logo-demo { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 700; color: #C9A962; }
+    .kiosk-timer-demo { font-size: 11px; color: white; background: #333; padding: 5px 10px; border-radius: 16px; }
+    .kiosk-categories-demo { display: flex; gap: 6px; padding: 10px 14px; background: white; }
+    .kiosk-cat { background: #f0f0f0; padding: 6px 12px; border-radius: 16px; font-size: 11px; }
+    .kiosk-cat.active { background: #C9A962; color: white; }
+    .kiosk-grid-demo { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 14px; }
+    .kiosk-mag-demo { height: 120px; border-radius: 10px; box-shadow: 0 3px 12px rgba(0,0,0,0.1); transition: transform 0.2s, outline 0.2s; }
+    .kiosk-mag-demo:nth-child(1) { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+    .kiosk-mag-demo:nth-child(2) { background: linear-gradient(135deg, #3498db, #2980b9); }
+    .kiosk-mag-demo:nth-child(3) { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+    .kiosk-mag-demo:nth-child(4) { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+    .kiosk-mag-demo.selected { outline: 3px solid #C9A962; transform: scale(1.03); }
+    
+    /* Scene 4: Reader */
+    .reader-screen { width: 100%; height: 100%; background: white; }
+    .reader-header-demo { background: #1a1a1a; padding: 45px 14px 10px; display: flex; align-items: center; gap: 12px; }
+    .reader-back { color: #C9A962; font-size: 18px; }
+    .reader-title-demo { color: white; font-size: 14px; font-weight: 600; }
+    .reader-content-demo { padding: 0; }
+    .reader-cover-demo { width: 100%; height: 160px; background: linear-gradient(135deg, #e74c3c, #c0392b); }
+    .reader-article-demo { padding: 16px; }
+    .reader-article-title-demo { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px; }
+    .reader-lines { display: flex; flex-direction: column; gap: 8px; }
+    .reader-line { height: 8px; background: #e0e0e0; border-radius: 4px; width: 100%; }
+    .reader-line.w90 { width: 90%; }
+    .reader-line.w95 { width: 95%; }
+    .reader-line.w80 { width: 80%; }
+    
+    /* Progress bar */
+    .demo-progress { display: flex; align-items: center; gap: 8px; margin-top: 30px; }
+    .progress-step { }
+    .progress-dot { width: 14px; height: 14px; background: #444; border-radius: 50%; transition: all 0.3s; }
+    .progress-dot.active { background: #C9A962; transform: scale(1.2); }
+    .progress-dot.done { background: #2ecc71; }
+    .progress-line { width: 35px; height: 2px; background: #444; transition: background 0.3s; }
+    .progress-line.done { background: #2ecc71; }
+    
+    .demo-caption-text { margin-top: 20px; font-size: 15px; color: #C9A962; }
+    
+    .restart-btn { margin-top: 24px; background: transparent; border: 2px solid #555; color: #888; padding: 10px 20px; border-radius: 8px; font-size: 13px; cursor: pointer; transition: all 0.3s; }
+    .restart-btn:hover { border-color: #C9A962; color: #C9A962; }
+
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero { padding: 100px 24px 60px; }
+      .hero-container { grid-template-columns: 1fr; text-align: center; gap: 50px; }
+      .hero h1 { font-size: 36px; }
+      .hero-buttons { justify-content: center; }
+      .hero-stats { justify-content: center; }
+      .phone-mockup { width: 260px; height: 520px; }
+      .grid-3 { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; gap: 40px; }
+      .section { padding: 80px 24px; }
+      .section-header h2 { font-size: 32px; }
+      .dashboard-container { grid-template-columns: 1fr; gap: 40px; }
+      .dashboard-mockup { order: -1; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-group.full-width { grid-column: span 1; }
+      .contact-form-card { padding: 30px 20px; }
+      .faq-question h3 { font-size: 15px; }
+    }
+    @media (max-width: 600px) {
+      .navbar { padding: 12px 16px; }
+      .logo-icon { width: 35px; height: 40px; }
+      .logo-text { font-size: 20px; }
+      .logo-slogan { display: none; }
+      .hero h1 { font-size: 28px; }
+      .btn-large { width: 100%; justify-content: center; }
+      .pricing-card { padding: 40px 24px; }
+      .pricing-amount .price { font-size: 48px; }
+      .cta-buttons { flex-direction: column; align-items: center; }
+      .cta-buttons a { width: 100%; max-width: 300px; text-align: center; }
+      .footer-content { flex-direction: column; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="logo-container">
+      <svg class="logo-icon" viewBox="0 0 55 60">
+        <rect x="16" y="0" width="36" height="56" rx="6" fill="none" stroke="#1a1a1a" stroke-width="2.5"/>
+        <rect x="20" y="5" width="28" height="46" rx="3" fill="#C9A962"/>
+        <g transform="rotate(-10 26 32)">
+          <rect x="0" y="10" width="28" height="40" rx="2" fill="white" stroke="#1a1a1a" stroke-width="1.8"/>
+          <line x1="4" y1="20" x2="22" y2="20" stroke="#1a1a1a" stroke-width="2.2" opacity="0.5"/>
+          <line x1="4" y1="28" x2="18" y2="28" stroke="#1a1a1a" stroke-width="1.5" opacity="0.3"/>
+          <line x1="4" y1="36" x2="20" y2="36" stroke="#1a1a1a" stroke-width="1.5" opacity="0.3"/>
+        </g>
+      </svg>
+      <div>
+        <span class="logo-text">Numerimag</span>
+        <span class="logo-slogan">KIOSQUE DIGITAL</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#features">Fonctionnalités</a>
+      <a href="#how">Comment ça marche</a>
+      <a href="#pricing">Tarifs</a>
+      <a href="kiosk.html" target="_blank">Démo</a>
+      <a href="#pricing" class="btn-primary">Demander un devis</a>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+  
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#features" onclick="toggleMenu()">Fonctionnalités</a>
+    <a href="#how" onclick="toggleMenu()">Comment ça marche</a>
+    <a href="#pricing" onclick="toggleMenu()">Tarifs</a>
+    <a href="kiosk.html">Démo</a>
+    <a href="#pricing" class="btn-primary" onclick="toggleMenu()">Demander un devis</a>
+  </div>
+
+  <section class="hero">
+    <div class="hero-container">
+      <div class="hero-content">
+        <span class="hero-badge">Réservé aux professionnels</span>
+        <h1>Votre salle d'attente mérite mieux que des <span>vieux magazines</span></h1>
+        <p class="hero-text">Offrez à vos clients un accès illimité à des dizaines de magazines pendant qu'ils patientent. Un simple QR code suffit — aucune app à télécharger, aucun compte à créer. Chacun lit sur son propre smartphone, fini les magazines manipulés par tout le monde.</p>
+        <p class="hero-sectors">Coiffeurs, garages, opticiens, cabinets, salons de beauté... <br>Partout où vos clients attendent.</p>
+        <div class="hero-buttons">
+          <a href="#pricing" class="btn-large primary">Demander un devis →</a>
+          <a href="kiosk.html" target="_blank" class="btn-large outline">Voir la démo</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><div class="number">60+</div><div class="label">Magazines gratuits</div></div>
+          <div class="stat"><div class="number">0€</div><div class="label">D'installation</div></div>
+          <div class="stat"><div class="number">2 min</div><div class="label">Pour commencer</div></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="phone-mockup">
+          <div class="phone-screen">
+            <div class="phone-header"><div class="phone-logo">NUMERIMAG</div></div>
+            <div class="phone-grid">
+              <div class="phone-mag"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200&h=150&fit=crop" alt=""></div>
+              <div class="phone-mag"><img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=200&h=150&fit=crop" alt=""></div>
+              <div class="phone-mag"><img src="https://images.unsplash.com/photo-1551524559-8af4e6624178?w=200&h=150&fit=crop" alt=""></div>
+              <div class="phone-mag"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=200&h=150&fit=crop" alt=""></div>
+              <div class="phone-mag"><img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=200&h=150&fit=crop" alt=""></div>
+              <div class="phone-mag"><img src="https://images.unsplash.com/photo-1444464666168-49d633b86797?w=200&h=150&fit=crop" alt=""></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="features">
+    <div class="section-header">
+      <h2>Pourquoi Numerimag ?</h2>
+      <p>Une solution pensée pour les professionnels et leurs clients</p>
+    </div>
+    <div class="grid-3">
+      <div class="card"><div class="icon">📱</div><h3>Sans application</h3><p>Vos clients scannent un QR code et accèdent directement aux magazines. Aucune app à télécharger.</p></div>
+      <div class="card"><div class="icon">🔒</div><h3>Accès géolocalisé</h3><p>Les magazines ne sont accessibles que dans votre salle d'attente. Impossible de les lire depuis chez soi.</p></div>
+      <div class="card"><div class="icon">🧹</div><h3>Hygiène parfaite</h3><p>Plus de magazines manipulés par des centaines de mains. Chacun lit sur son propre smartphone.</p></div>
+      <div class="card"><div class="icon">📊</div><h3>Statistiques</h3><p>Suivez les lectures en temps réel depuis votre tableau de bord. Découvrez les préférences de vos clients.</p></div>
+      <div class="card"><div class="icon">🔄</div><h3>Toujours à jour</h3><p>Nouveaux numéros ajoutés automatiquement. Fini les piles de vieux magazines périmés.</p></div>
+      <div class="card card-pro"><span class="badge-pro">PRO</span><div class="icon">📄</div><h3>Vos documents</h3><p>Partagez vos propres documents : tarifs, brochures, promotions. Vos clients y accèdent directement dans le kiosque.</p></div>
+    </div>
+  </section>
+
+  <section class="section alt" id="how">
+    <div class="section-header">
+      <h2>Simple comme bonjour</h2>
+      <p>Opérationnel en 3 étapes, sans aucune compétence technique</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-number">1</div><h3>Inscrivez-vous</h3><p>Créez votre compte en 30 secondes. Aucune carte bancaire requise pour l'essai gratuit.</p></div>
+      <div class="step"><div class="step-number">2</div><h3>Affichez le QR code</h3><p>Imprimez ou affichez le QR code personnalisé dans votre salle d'attente.</p></div>
+      <div class="step"><div class="step-number">3</div><h3>C'est prêt !</h3><p>Vos clients scannent et lisent. Vous suivez tout depuis votre tableau de bord.</p></div>
+    </div>
+  </section>
+
+  <!-- DEMO ANIMEE - Option C Simulation réaliste -->
+  <section class="section demo-section" id="demo-video">
+    <div class="section-header">
+      <h2>Voyez comment ça marche</h2>
+      <p>L'expérience de vos clients en quelques secondes</p>
+    </div>
+    <div class="demo-container">
+      <div class="demo-phone-realistic">
+        <div class="demo-notch"></div>
+        <div class="demo-screen">
+          <!-- Scene 1: Camera / QR Scanner -->
+          <div class="demo-scene active" id="scene1">
+            <div class="camera-view">
+              <div class="camera-frame">
+                <div class="camera-corner tl"></div>
+                <div class="camera-corner tr"></div>
+                <div class="camera-corner bl"></div>
+                <div class="camera-corner br"></div>
+                <div class="qr-in-frame">
+                  <div class="qr-pattern-demo"></div>
+                </div>
+              </div>
+              <div class="scan-success" id="scanSuccess"></div>
+              <p class="camera-hint">Pointez vers le QR code</p>
+            </div>
+          </div>
+          
+          <!-- Scene 2: Loading -->
+          <div class="demo-scene" id="scene2">
+            <div class="loading-screen">
+              <div class="loading-logo-anim">N</div>
+              <p class="loading-text">Chargement du kiosque...</p>
+              <div class="loading-bar-anim"><div class="loading-fill"></div></div>
+            </div>
+          </div>
+          
+          <!-- Scene 3: Magazine Grid -->
+          <div class="demo-scene" id="scene3">
+            <div class="kiosk-screen">
+              <div class="kiosk-header-demo">
+                <span class="kiosk-logo-demo">NUMERIMAG</span>
+                <span class="kiosk-timer-demo">⏱ 29:45</span>
+              </div>
+              <div class="kiosk-categories-demo">
+                <span class="kiosk-cat active">Tous</span>
+                <span class="kiosk-cat">Actu</span>
+                <span class="kiosk-cat">Cuisine</span>
+              </div>
+              <div class="kiosk-grid-demo">
+                <div class="kiosk-mag-demo" id="mag1"></div>
+                <div class="kiosk-mag-demo"></div>
+                <div class="kiosk-mag-demo"></div>
+                <div class="kiosk-mag-demo"></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Scene 4: Reader -->
+          <div class="demo-scene" id="scene4">
+            <div class="reader-screen">
+              <div class="reader-header-demo">
+                <span class="reader-back">←</span>
+                <span class="reader-title-demo">Paris Match</span>
+              </div>
+              <div class="reader-content-demo">
+                <div class="reader-cover-demo"></div>
+                <div class="reader-article-demo">
+                  <div class="reader-article-title-demo">Les coulisses du pouvoir</div>
+                  <div class="reader-lines">
+                    <div class="reader-line"></div>
+                    <div class="reader-line w90"></div>
+                    <div class="reader-line w95"></div>
+                    <div class="reader-line w80"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="finger" id="finger"></div>
+      </div>
+      
+      <div class="demo-progress">
+        <div class="progress-step">
+          <div class="progress-dot active" id="dot1"></div>
+        </div>
+        <div class="progress-line" id="line1"></div>
+        <div class="progress-step">
+          <div class="progress-dot" id="dot2"></div>
+        </div>
+        <div class="progress-line" id="line2"></div>
+        <div class="progress-step">
+          <div class="progress-dot" id="dot3"></div>
+        </div>
+        <div class="progress-line" id="line3"></div>
+        <div class="progress-step">
+          <div class="progress-dot" id="dot4"></div>
+        </div>
+      </div>
+      
+      <p class="demo-caption-text" id="captionText">Scan du QR code...</p>
+      
+      <button class="restart-btn" onclick="restartDemo()">🔄 Revoir la démo</button>
+    </div>
+  </section>
+
+  <section class="section dashboard-preview" id="dashboard">
+    <div class="section-header">
+      <h2>Votre espace pro</h2>
+      <p>Un tableau de bord simple pour tout piloter</p>
+    </div>
+    <div class="dashboard-container">
+      <div class="dashboard-features">
+        <div class="dash-feature">
+          <div class="dash-icon">📲</div>
+          <div>
+            <h4>Votre QR code personnalisé</h4>
+            <p>Téléchargez et imprimez votre QR code unique, prêt à afficher dans votre salle d'attente.</p>
+          </div>
+        </div>
+        <div class="dash-feature">
+          <div class="dash-icon">📊</div>
+          <div>
+            <h4>Statistiques en temps réel</h4>
+            <p>Suivez le nombre de lectures, les magazines les plus populaires et l'activité quotidienne.</p>
+          </div>
+        </div>
+        <div class="dash-feature">
+          <div class="dash-icon">📚</div>
+          <div>
+            <h4>Catalogue complet</h4>
+            <p>Parcourez les 60+ magazines disponibles pour vos clients, mis à jour chaque mois.</p>
+          </div>
+        </div>
+        <div class="dash-feature dash-feature-pro">
+          <div class="dash-icon">📄</div>
+          <div>
+            <h4>Vos documents <span class="badge-pro-small">PRO</span></h4>
+            <p>Uploadez vos propres PDF : tarifs, brochures, promotions. Ils apparaissent dans votre kiosque.</p>
+          </div>
+        </div>
+      </div>
+      <div class="dashboard-mockup">
+        <div class="mockup-window">
+          <div class="mockup-header">
+            <div class="mockup-dots"><span></span><span></span><span></span></div>
+            <div class="mockup-url">numerimag.be/dashboard</div>
+          </div>
+          <div class="mockup-content">
+            <div class="mockup-sidebar">
+              <div class="mockup-logo">N</div>
+              <div class="mockup-nav-item active"></div>
+              <div class="mockup-nav-item"></div>
+              <div class="mockup-nav-item"></div>
+            </div>
+            <div class="mockup-main">
+              <div class="mockup-stats">
+                <div class="mockup-stat"><div class="mockup-stat-num">847</div><div class="mockup-stat-label">Lectures</div></div>
+                <div class="mockup-stat"><div class="mockup-stat-num">312</div><div class="mockup-stat-label">Visiteurs</div></div>
+                <div class="mockup-stat"><div class="mockup-stat-num">4:32</div><div class="mockup-stat-label">Durée moy.</div></div>
+              </div>
+              <div class="mockup-qr">
+                <div class="mockup-qr-code"></div>
+                <div class="mockup-qr-text">Votre QR code</div>
+              </div>
+              <div class="mockup-docs">
+                <div class="mockup-docs-icon">📄</div>
+                <div class="mockup-docs-text">Mes documents (3)</div>
+                <div class="mockup-docs-badge">PRO</div>
+              </div>
+              <div class="mockup-chart">
+                <div class="mockup-bar" style="height: 60%;"></div>
+                <div class="mockup-bar" style="height: 80%;"></div>
+                <div class="mockup-bar" style="height: 45%;"></div>
+                <div class="mockup-bar" style="height: 90%;"></div>
+                <div class="mockup-bar" style="height: 70%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="pricing">
+    <div class="section-header">
+      <h2>Tarifs simples et transparents</h2>
+      <p>Sans engagement • Annulez à tout moment</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card-new">
+        <div class="pricing-header">
+          <h3>Starter</h3>
+          <p class="pricing-desc">Idéal pour commencer</p>
+        </div>
+        <div class="pricing-price">
+          <span class="price-amount">29</span>
+          <span class="price-currency">€</span>
+          <span class="price-period">/mois HTVA</span>
+        </div>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> 60+ magazines inclus</li>
+          <li><span class="check">✓</span> 1 QR code personnalisé</li>
+          <li><span class="check">✓</span> Tableau de bord</li>
+          <li><span class="check">✓</span> Statistiques de lecture</li>
+          <li><span class="check">✓</span> Support par email</li>
+          <li class="disabled"><span class="cross">✗</span> Documents personnalisés</li>
+        </ul>
+        <button class="btn-pricing" onclick="subscribe('starter')">Commencer →</button>
+      </div>
+      
+      <div class="pricing-card-new popular">
+        <div class="popular-badge">Le plus populaire</div>
+        <div class="pricing-header">
+          <h3>Pro</h3>
+          <p class="pricing-desc">Pour aller plus loin</p>
+        </div>
+        <div class="pricing-price">
+          <span class="price-amount">49</span>
+          <span class="price-currency">€</span>
+          <span class="price-period">/mois HTVA</span>
+        </div>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> 60+ magazines inclus</li>
+          <li><span class="check">✓</span> 1 QR code personnalisé</li>
+          <li><span class="check">✓</span> Tableau de bord</li>
+          <li><span class="check">✓</span> Statistiques avancées</li>
+          <li><span class="check">✓</span> Support prioritaire</li>
+          <li><span class="check gold">✓</span> <strong>Documents personnalisés</strong></li>
+        </ul>
+        <button class="btn-pricing gold" onclick="subscribe('pro')">Commencer →</button>
+      </div>
+    </div>
+    <p class="pricing-note-bottom">TVA 21% en sus • Facturation mensuelle • Paiement sécurisé par Stripe</p>
+  </section>
+
+  <section class="section" id="devis">
+    <div class="section-header">
+      <h2>Des questions ? Demandez un devis</h2>
+      <p>Nous reviendrons vers vous rapidement</p>
+    </div>
+    <div class="contact-form-card">
+      <form class="contact-form" id="contactForm" name="devis" method="POST" action="/merci.html" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="devis">
+        <p style="display:none;"><label>Ne remplissez pas si vous êtes humain: <input name="bot-field"></label></p>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Nom complet *</label>
+            <input type="text" id="name" name="name" required placeholder="Jean Dupont">
+          </div>
+          <div class="form-group">
+            <label for="email">Email professionnel *</label>
+            <input type="email" id="email" name="email" required placeholder="jean@monsalon.be">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="company">Nom de l'établissement *</label>
+            <input type="text" id="company" name="company" required placeholder="Salon Élégance">
+          </div>
+          <div class="form-group">
+            <label for="sector">Secteur d'activité *</label>
+            <select id="sector" name="sector" required>
+              <option value="">Sélectionnez...</option>
+              <option value="coiffure">Coiffure / Esthétique</option>
+              <option value="medical">Cabinet médical</option>
+              <option value="dentaire">Cabinet dentaire</option>
+              <option value="veterinaire">Vétérinaire</option>
+              <option value="garage">Garage / Concession auto</option>
+              <option value="optique">Opticien</option>
+              <option value="bureau">Bureau / Espace d'accueil</option>
+              <option value="autre">Autre</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="vat">Numéro de TVA *</label>
+            <input type="text" id="vat" name="vat" required placeholder="BE 0123.456.789" pattern="BE\s?[0-1]?[0-9]{3}[\.\s]?[0-9]{3}[\.\s]?[0-9]{3}">
+            <span class="vat-status" id="vatStatus"></span>
+          </div>
+          <div class="form-group">
+            <label for="locations">Nombre de salles d'attente</label>
+            <select id="locations" name="locations">
+              <option value="1">1 emplacement</option>
+              <option value="2-3">2-3 emplacements</option>
+              <option value="4-5">4-5 emplacements</option>
+              <option value="5+">Plus de 5</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="phone">Téléphone (optionnel)</label>
+            <input type="tel" id="phone" name="phone" placeholder="+32 XXX XX XX XX">
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label for="message">Message (optionnel)</label>
+          <textarea id="message" name="message" rows="3" placeholder="Des questions ou précisions sur votre projet ?"></textarea>
+        </div>
+        <button type="submit" class="btn-large primary" style="width:100%;">Envoyer ma demande →</button>
+        <p class="form-note">* Champs obligatoires • Vos données restent confidentielles</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section alt" id="faq">
+    <div class="section-header">
+      <h2>Questions fréquentes</h2>
+      <p>Tout ce que vous devez savoir sur Numerimag</p>
+    </div>
+    <div class="faq-container">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>Mes clients doivent-ils télécharger une application ?</h3>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Non, aucune application n'est nécessaire. Vos clients scannent simplement le QR code avec l'appareil photo de leur smartphone et accèdent directement aux magazines via leur navigateur web.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>Comment fonctionne l'accès géolocalisé ?</h3>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Les magazines ne sont accessibles que lorsque le client se trouve physiquement dans votre établissement. Dès qu'il quitte les lieux, l'accès est automatiquement désactivé. Cela évite tout abus et garantit une utilisation équitable.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>Ai-je besoin d'une connexion internet ou wifi ?</h3>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Vos clients utilisent leur propre connexion mobile (4G/5G). Vous n'avez pas besoin de fournir de wifi, ce qui simplifie l'installation et évite les problèmes de sécurité réseau.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>Quels magazines sont disponibles ?</h3>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Notre catalogue comprend plus de 60 magazines francophones couvrant de nombreuses thématiques : actualité, cuisine, santé, voyage, automobile, décoration, famille, et bien plus. De nouveaux titres sont ajoutés régulièrement.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>Comment installer Numerimag dans ma salle d'attente ?</h3>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>C'est très simple : vous recevez un QR code personnalisé que vous pouvez imprimer et afficher où vous le souhaitez (comptoir, table, mur). Aucune installation technique n'est nécessaire — c'est prêt en 2 minutes.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>Puis-je essayer avant de m'engager ?</h3>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Oui, nous proposons un essai gratuit sans engagement. Vous pouvez tester le service dans votre établissement et voir comment vos clients réagissent avant de prendre une décision.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>Puis-je partager mes propres documents ?</h3>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Oui ! Avec l'offre Pro, vous pouvez uploader vos propres documents (tarifs, brochures, promotions, informations pratiques) directement depuis votre tableau de bord. Ils apparaîtront dans une section dédiée de votre kiosque, aux côtés des magazines.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Prêt à moderniser votre salle d'attente ?</h2>
+    <p>Rejoignez les professionnels qui ont déjà fait le pas vers le digital. Demandez votre devis personnalisé et offrez une meilleure expérience à vos clients.</p>
+    <div class="cta-buttons">
+      <a href="#pricing" class="btn-gold">Demander un devis →</a>
+      <a href="kiosk.html" target="_blank" class="btn-outline-white">Voir la démo client</a>
+    </div>
+    <div class="sectors-tags">
+      <span class="sector-tag">💇 Coiffeurs</span>
+      <span class="sector-tag">🚗 Garages</span>
+      <span class="sector-tag">👓 Opticiens</span>
+      <span class="sector-tag">🏥 Cabinets</span>
+      <span class="sector-tag">🏢 Bureaux</span>
+      <span class="sector-tag">🐕 Vétérinaires</span>
+    </div>
+  </section>
+
+  <!-- Cookie Banner -->
+  <div class="cookie-banner" id="cookieBanner">
+    <p class="cookie-text">
+      Nous utilisons des cookies pour améliorer votre expérience. En continuant, vous acceptez notre 
+      <a href="cookies.html">politique de cookies</a> et notre <a href="confidentialite.html">politique de confidentialité</a>.
+    </p>
+    <div class="cookie-buttons">
+      <button class="cookie-btn decline" onclick="declineCookies()">Refuser</button>
+      <button class="cookie-btn accept" onclick="acceptCookies()">Accepter</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <svg width="35" height="40" viewBox="0 0 55 60">
+          <rect x="16" y="0" width="36" height="56" rx="6" fill="none" stroke="#C9A962" stroke-width="2.5"/>
+          <rect x="20" y="5" width="28" height="46" rx="3" fill="#C9A962"/>
+          <g transform="rotate(-10 26 32)">
+            <rect x="0" y="10" width="28" height="40" rx="2" fill="#1a1a1a" stroke="#C9A962" stroke-width="1.8"/>
+            <line x1="4" y1="20" x2="22" y2="20" stroke="#C9A962" stroke-width="2.2" opacity="0.5"/>
+          </g>
+        </svg>
+        <span>Numerimag</span>
+      </div>
+      <div class="footer-links">
+        <a href="#features">Fonctionnalités</a>
+        <a href="#pricing">Tarifs</a>
+        <a href="kiosk.html">Démo</a>
+        <a href="/cdn-cgi/l/email-protection#a6cfc8c0c9e6c8d3cbc3d4cfcbc7c188c4c3">Contact</a>
+      </div>
+      <div class="footer-legal">
+        <a href="mentions-legales.html">Mentions légales</a>
+        <a href="confidentialite.html">Politique de confidentialité</a>
+        <a href="cookies.html">Cookies</a>
+        <a href="cgv.html">CGV</a>
+      </div>
+      <div class="footer-copy">© 2025 Numerimag — CJM GROUP SRL — TVA BE 1002.695.334 — Made in Belgium 🇧🇪</div>
+    </div>
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Menu mobile
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('active');
+      document.querySelector('.hamburger').classList.toggle('active');
+    }
+    
+    // FAQ Accordéon
+    function toggleFaq(element) {
+      const item = element.parentElement;
+      const wasActive = item.classList.contains('active');
+      
+      // Fermer tous les autres
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      
+      // Toggle celui cliqué
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+    
+    // Animation Démo Option C
+    const finger = document.getElementById('finger');
+    const scenes = ['scene1', 'scene2', 'scene3', 'scene4'];
+    const captions = [
+      'Scan du QR code...',
+      'Chargement du kiosque...',
+      'Choix du magazine...',
+      'Bonne lecture !'
+    ];
+    
+    function showDemoScene(index) {
+      scenes.forEach((s, i) => {
+        const el = document.getElementById(s);
+        if (el) el.classList.toggle('active', i === index);
+      });
+      const captionEl = document.getElementById('captionText');
+      if (captionEl) captionEl.textContent = captions[index];
+      
+      // Update progress
+      for (let i = 1; i <= 4; i++) {
+        const dot = document.getElementById('dot' + i);
+        if (dot) {
+          dot.classList.remove('active', 'done');
+          if (i < index + 1) dot.classList.add('done');
+          else if (i === index + 1) dot.classList.add('active');
+        }
+      }
+      for (let i = 1; i <= 3; i++) {
+        const line = document.getElementById('line' + i);
+        if (line) line.classList.toggle('done', i <= index);
+      }
+    }
+    
+    function moveFinger(x, y, show = true) {
+      if (finger) {
+        finger.style.left = x + 'px';
+        finger.style.top = y + 'px';
+        finger.classList.toggle('visible', show);
+      }
+    }
+    
+    function tapFinger() {
+      if (finger) {
+        finger.classList.add('tap');
+        setTimeout(() => finger.classList.remove('tap'), 300);
+      }
+    }
+    
+    function runDemo() {
+      showDemoScene(0);
+      moveFinger(0, 0, false);
+      
+      const scanSuccess = document.getElementById('scanSuccess');
+      const mag1 = document.getElementById('mag1');
+      
+      // Reset
+      if (scanSuccess) scanSuccess.classList.remove('show');
+      if (mag1) mag1.classList.remove('selected');
+      
+      // Scene 1: QR scan success
+      setTimeout(() => {
+        if (scanSuccess) scanSuccess.classList.add('show');
+      }, 2500);
+      
+      // Scene 2: Loading
+      setTimeout(() => showDemoScene(1), 3500);
+      
+      // Scene 3: Grid
+      setTimeout(() => showDemoScene(2), 6000);
+      
+      // Finger moves to magazine
+      setTimeout(() => moveFinger(80, 350), 7000);
+      
+      // Tap on magazine
+      setTimeout(() => {
+        tapFinger();
+        if (mag1) mag1.classList.add('selected');
+      }, 7500);
+      
+      // Scene 4: Reader
+      setTimeout(() => {
+        showDemoScene(3);
+        moveFinger(0, 0, false);
+      }, 8500);
+      
+      // Loop
+      setTimeout(runDemo, 12000);
+    }
+    
+    function restartDemo() {
+      runDemo();
+    }
+    
+    // Start demo
+    runDemo();
+    
+    // Cookie Banner
+    function acceptCookies() {
+      localStorage.setItem('cookieConsent', 'accepted');
+      document.getElementById('cookieBanner').classList.add('hidden');
+    }
+    
+    function declineCookies() {
+      localStorage.setItem('cookieConsent', 'declined');
+      document.getElementById('cookieBanner').classList.add('hidden');
+    }
+    
+    // Check cookie consent on load
+    if (localStorage.getItem('cookieConsent')) {
+      document.getElementById('cookieBanner').classList.add('hidden');
+    }
+    
+    // ============================================
+    // STRIPE CHECKOUT INTEGRATION
+    // ============================================
+    const API_URL = 'https://numerimag-backend-production.up.railway.app';
+    
+    async function subscribe(plan) {
+      const btn = event.target;
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Chargement...';
+      
+      try {
+        const response = await fetch(`${API_URL}/api/billing/create-checkout-session`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            plan: plan,
+            successUrl: window.location.origin + '/merci.html',
+            cancelUrl: window.location.origin + '/#pricing'
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.url) {
+          // Redirect to Stripe Checkout
+          window.location.href = data.url;
+        } else {
+          throw new Error(data.error || 'Erreur lors de la création de la session');
+        }
+      } catch (error) {
+        console.error('Erreur:', error);
+        alert('Une erreur est survenue. Veuillez réessayer ou nous contacter.');
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
+    }
+  </script>
+</body>
+</html>
