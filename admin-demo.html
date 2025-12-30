@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numerimag - Administration Kiosque</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0f0f0f; color: #fff; min-height: 100vh; }
+        
+        .header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(201, 169, 98, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: #C9A962; letter-spacing: 2px; }
+        .header-subtitle { font-size: 12px; color: #888; margin-top: 4px; }
+        .header-actions { display: flex; gap: 12px; }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary { background: #C9A962; color: #1a1a1a; border: none; }
+        .btn-primary:hover { background: #d4b56a; transform: translateY(-2px); }
+        .btn-secondary { background: transparent; color: #C9A962; border: 1px solid #C9A962; }
+        .btn-secondary:hover { background: rgba(201, 169, 98, 0.1); }
+        
+        .main { display: grid; grid-template-columns: 1fr 1fr; min-height: calc(100vh - 80px); }
+        
+        .panel {
+            padding: 30px;
+            overflow-y: auto;
+        }
+        .panel-left { background: #1a1a1a; border-right: 1px solid rgba(255,255,255,0.1); }
+        .panel-right { background: #0f0f0f; }
+        
+        .section { margin-bottom: 30px; }
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: #C9A962;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 13px; color: #888; margin-bottom: 8px; font-weight: 500; }
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .form-input:focus { outline: none; border-color: #C9A962; background: rgba(201, 169, 98, 0.05); }
+        .form-input::placeholder { color: #666; }
+        
+        .logo-upload {
+            border: 2px dashed rgba(201, 169, 98, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(201, 169, 98, 0.02);
+        }
+        .logo-upload:hover { border-color: #C9A962; background: rgba(201, 169, 98, 0.05); }
+        .logo-upload input { display: none; }
+        .logo-upload-icon { font-size: 48px; margin-bottom: 12px; }
+        .logo-upload-text { color: #888; font-size: 14px; }
+        .logo-upload-hint { color: #666; font-size: 12px; margin-top: 8px; }
+        
+        .logo-preview {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            margin-top: 16px;
+        }
+        .logo-preview img {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            background: #fff;
+            border-radius: 8px;
+            padding: 8px;
+        }
+        .logo-preview-info { flex: 1; }
+        .logo-preview-name { font-weight: 500; margin-bottom: 4px; }
+        .logo-preview-size { font-size: 12px; color: #888; }
+        .logo-preview-remove {
+            background: rgba(255,100,100,0.1);
+            color: #ff6464;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .logo-preview-remove:hover { background: rgba(255,100,100,0.2); }
+        
+        .documents-list { display: flex; flex-direction: column; gap: 12px; }
+        .document-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .document-icon-btn {
+            width: 48px;
+            height: 48px;
+            background: rgba(201, 169, 98, 0.1);
+            border: 1px solid rgba(201, 169, 98, 0.3);
+            border-radius: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .document-icon-btn:hover { background: rgba(201, 169, 98, 0.2); }
+        .document-info { flex: 1; }
+        .document-info input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 4px 0;
+        }
+        .document-info input:focus { outline: none; }
+        .document-info input::placeholder { color: #666; }
+        .document-file {
+            font-size: 11px;
+            color: #888;
+            margin-top: 4px;
+        }
+        .document-file a { color: #C9A962; }
+        .document-actions { display: flex; gap: 8px; }
+        .document-action {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .document-action-upload { background: rgba(201, 169, 98, 0.1); color: #C9A962; }
+        .document-action-upload:hover { background: rgba(201, 169, 98, 0.2); }
+        .document-action-delete { background: rgba(255,100,100,0.1); color: #ff6464; }
+        .document-action-delete:hover { background: rgba(255,100,100,0.2); }
+        
+        .add-document-btn {
+            width: 100%;
+            padding: 16px;
+            background: transparent;
+            border: 2px dashed rgba(201, 169, 98, 0.3);
+            border-radius: 12px;
+            color: #C9A962;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .add-document-btn:hover { border-color: #C9A962; background: rgba(201, 169, 98, 0.05); }
+        
+        .emoji-picker {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #2d2d2d;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: none;
+        }
+        .emoji-picker.active { display: block; }
+        .emoji-picker-title { font-size: 14px; color: #888; margin-bottom: 12px; }
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 8px;
+        }
+        .emoji-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.05);
+            border: none;
+            border-radius: 8px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .emoji-btn:hover { background: rgba(201, 169, 98, 0.2); transform: scale(1.1); }
+        .emoji-picker-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+        .emoji-picker-overlay.active { display: block; }
+        
+        /* Preview Panel */
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .preview-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: #C9A962;
+        }
+        
+        .preview-frame {
+            background: #1a1a1a;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .preview-browser-bar {
+            background: #2d2d2d;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .preview-dots { display: flex; gap: 6px; }
+        .preview-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .preview-dot-red { background: #ff5f57; }
+        .preview-dot-yellow { background: #ffbd2e; }
+        .preview-dot-green { background: #28c840; }
+        .preview-url {
+            flex: 1;
+            background: rgba(0,0,0,0.3);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #888;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .preview-content {
+            padding: 20px;
+            min-height: 400px;
+        }
+        .preview-kiosk-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        .preview-branding { display: flex; align-items: center; gap: 12px; }
+        .preview-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #C9A962 0%, #a8893e 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            overflow: hidden;
+        }
+        .preview-logo img { width: 100%; height: 100%; object-fit: cover; }
+        .preview-business-name { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 600; }
+        .preview-powered { font-size: 9px; color: #666; }
+        .preview-powered span { color: #C9A962; }
+        .preview-timer { font-size: 12px; color: #C9A962; background: rgba(201, 169, 98, 0.1); padding: 4px 10px; border-radius: 12px; }
+        
+        .preview-welcome { text-align: center; padding: 16px 0; }
+        .preview-welcome h2 { font-family: 'Cormorant Garamond', serif; font-size: 18px; margin-bottom: 6px; }
+        .preview-welcome p { font-size: 11px; color: #888; }
+        
+        .preview-documents {
+            background: rgba(201, 169, 98, 0.1);
+            border: 1px solid rgba(201, 169, 98, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .preview-documents-title {
+            font-size: 14px;
+            color: #C9A962;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .preview-documents-title .badge {
+            background: #C9A962;
+            color: #1a1a1a;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .preview-documents-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+        .preview-doc-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+        .preview-doc-icon { font-size: 24px; margin-bottom: 6px; }
+        .preview-doc-name { font-size: 10px; font-weight: 500; }
+        
+        .type-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .type-btn {
+            padding: 12px 8px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .type-btn:hover { border-color: rgba(201, 169, 98, 0.5); }
+        .type-btn.active { background: rgba(201, 169, 98, 0.1); border-color: #C9A962; }
+        .type-btn-icon { font-size: 20px; }
+        
+        .save-indicator {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #28c840;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(40, 200, 64, 0.3);
+        }
+        .save-indicator.show { display: flex; }
+        
+        @media (max-width: 1024px) {
+            .main { grid-template-columns: 1fr; }
+            .panel-right { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div>
+            <div class="logo">NUMERIMAG</div>
+            <div class="header-subtitle">Administration du kiosque</div>
+        </div>
+        <div class="header-actions">
+            <a href="index.html" class="btn btn-secondary">← Retour au site</a>
+            <button class="btn btn-primary" onclick="openPreview()">👁️ Voir le kiosque</button>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="panel panel-left">
+            <!-- Business Type -->
+            <div class="section">
+                <div class="section-title">🏢 Type d'établissement</div>
+                <div class="type-selector" id="typeSelector">
+                    <button class="type-btn active" data-type="dentiste">
+                        <span class="type-btn-icon">🦷</span>
+                        Dentiste
+                    </button>
+                    <button class="type-btn" data-type="coiffeur">
+                        <span class="type-btn-icon">💇</span>
+                        Coiffeur
+                    </button>
+                    <button class="type-btn" data-type="garage">
+                        <span class="type-btn-icon">🚗</span>
+                        Garage
+                    </button>
+                    <button class="type-btn" data-type="veterinaire">
+                        <span class="type-btn-icon">🐕</span>
+                        Vétérinaire
+                    </button>
+                    <button class="type-btn" data-type="medecin">
+                        <span class="type-btn-icon">⚕️</span>
+                        Médecin
+                    </button>
+                    <button class="type-btn" data-type="opticien">
+                        <span class="type-btn-icon">👓</span>
+                        Opticien
+                    </button>
+                    <button class="type-btn" data-type="pharmacie">
+                        <span class="type-btn-icon">💊</span>
+                        Pharmacie
+                    </button>
+                    <button class="type-btn" data-type="beaute">
+                        <span class="type-btn-icon">💅</span>
+                        Beauté
+                    </button>
+                    <button class="type-btn" data-type="kine">
+                        <span class="type-btn-icon">💪</span>
+                        Kiné
+                    </button>
+                </div>
+            </div>
+
+            <!-- Business Info -->
+            <div class="section">
+                <div class="section-title">✏️ Informations</div>
+                <div class="form-group">
+                    <label class="form-label">Nom de l'établissement</label>
+                    <input type="text" class="form-input" id="businessName" placeholder="Ex: Cabinet Dentaire Martin" oninput="updatePreview()">
+                </div>
+            </div>
+
+            <!-- Logo Upload -->
+            <div class="section">
+                <div class="section-title">🖼️ Logo</div>
+                <label class="logo-upload" id="logoUpload">
+                    <input type="file" accept="image/*" onchange="handleLogoUpload(event)">
+                    <div class="logo-upload-icon">📤</div>
+                    <div class="logo-upload-text">Cliquez ou glissez votre logo ici</div>
+                    <div class="logo-upload-hint">PNG, JPG • Max 2MB</div>
+                </label>
+                <div class="logo-preview" id="logoPreview" style="display: none;">
+                    <img id="logoPreviewImg" src="" alt="Logo">
+                    <div class="logo-preview-info">
+                        <div class="logo-preview-name" id="logoPreviewName">logo.png</div>
+                        <div class="logo-preview-size" id="logoPreviewSize">0 KB</div>
+                    </div>
+                    <button class="logo-preview-remove" onclick="removeLogo()">Supprimer</button>
+                </div>
+            </div>
+
+            <!-- Documents -->
+            <div class="section">
+                <div class="section-title">📄 Documents</div>
+                <div class="documents-list" id="documentsList"></div>
+                <button class="add-document-btn" onclick="addDocument()">
+                    <span>+</span> Ajouter un document
+                </button>
+            </div>
+        </div>
+
+        <div class="panel panel-right">
+            <div class="preview-header">
+                <div class="preview-title">📱 Aperçu en direct</div>
+            </div>
+            
+            <div class="preview-frame">
+                <div class="preview-browser-bar">
+                    <div class="preview-dots">
+                        <div class="preview-dot preview-dot-red"></div>
+                        <div class="preview-dot preview-dot-yellow"></div>
+                        <div class="preview-dot preview-dot-green"></div>
+                    </div>
+                    <div class="preview-url" id="previewUrl">numerimag.be/kiosk.html?type=dentiste&business=...</div>
+                </div>
+                <div class="preview-content">
+                    <div class="preview-kiosk-header">
+                        <div class="preview-branding">
+                            <div class="preview-logo" id="previewLogo">🦷</div>
+                            <div>
+                                <div class="preview-business-name" id="previewBusinessName">Cabinet Dentaire Martin</div>
+                                <div class="preview-powered">Propulsé par <span>NUMERIMAG</span></div>
+                            </div>
+                        </div>
+                        <div class="preview-timer">30:00</div>
+                    </div>
+                    
+                    <div class="preview-welcome">
+                        <h2 id="previewWelcome">Bienvenue chez Cabinet Dentaire Martin</h2>
+                        <p>Profitez de notre sélection de magazines pendant votre attente</p>
+                    </div>
+                    
+                    <div class="preview-documents">
+                        <div class="preview-documents-title">
+                            📄 Nos Documents
+                            <span class="badge">PRO</span>
+                        </div>
+                        <div class="preview-documents-grid" id="previewDocuments"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Emoji Picker -->
+    <div class="emoji-picker-overlay" id="emojiOverlay" onclick="closeEmojiPicker()"></div>
+    <div class="emoji-picker" id="emojiPicker">
+        <div class="emoji-picker-title">Choisir une icône</div>
+        <div class="emoji-grid" id="emojiGrid"></div>
+    </div>
+
+    <!-- Save Indicator -->
+    <div class="save-indicator" id="saveIndicator">
+        ✓ Modifications enregistrées
+    </div>
+
+    <script>
+        // Emojis disponibles pour les documents
+        const emojis = ['💰', '📋', '✨', '🎁', '👥', '📅', '💉', '❤️', '🔧', '🚗', '💊', '🌙', '🧴', '🏋️', '🧘', '🦷', '💇', '🐕', '⚕️', '👓', '💅', '💪', '📄', '📑', '📊', '📈', '🎯', '⭐', '🏆', '🎉', '💡', '🔥'];
+        
+        // État de l'application
+        let state = {
+            type: 'dentiste',
+            businessName: 'Cabinet Dentaire Martin',
+            logo: null,
+            logoEmoji: '🦷',
+            documents: [
+                { id: 1, name: 'Nos Tarifs 2025', icon: '💰', file: null },
+                { id: 2, name: 'Guide des Soins', icon: '🦷', file: null },
+                { id: 3, name: 'Offre Blanchiment -20%', icon: '✨', file: null },
+                { id: 4, name: 'Notre Équipe', icon: '👥', file: null },
+            ]
+        };
+
+        let currentEmojiTarget = null;
+        let nextDocId = 5;
+
+        // Types d'établissements avec emojis par défaut
+        const typeEmojis = {
+            dentiste: '🦷',
+            coiffeur: '💇',
+            garage: '🚗',
+            veterinaire: '🐕',
+            medecin: '⚕️',
+            opticien: '👓',
+            pharmacie: '💊',
+            beaute: '💅',
+            kine: '💪'
+        };
+
+        // Documents par défaut par type
+        const defaultDocuments = {
+            dentiste: [
+                { name: 'Nos Tarifs 2025', icon: '💰' },
+                { name: 'Guide des Soins', icon: '🦷' },
+                { name: 'Offre Blanchiment -20%', icon: '✨' },
+                { name: 'Notre Équipe', icon: '👥' },
+            ],
+            coiffeur: [
+                { name: 'Tarifs Coupes & Couleurs', icon: '💰' },
+                { name: 'Tendances 2025', icon: '✨' },
+                { name: 'Offre Fidélité', icon: '🎁' },
+                { name: 'Nos Produits', icon: '🧴' },
+            ],
+            garage: [
+                { name: 'Tarifs Main d\'œuvre', icon: '💰' },
+                { name: 'Guide Entretien', icon: '🔧' },
+                { name: 'Promo Pneus Hiver', icon: '❄️' },
+                { name: 'Véhicules Occasion', icon: '🚙' },
+            ],
+            veterinaire: [
+                { name: 'Tarifs Consultations', icon: '💰' },
+                { name: 'Calendrier Vaccins', icon: '💉' },
+                { name: 'Conseils Nutrition', icon: '🦴' },
+                { name: 'Numéros Urgences', icon: '🚨' },
+            ],
+            medecin: [
+                { name: 'Horaires & Rdv', icon: '📅' },
+                { name: 'Calendrier Vaccinal', icon: '💉' },
+                { name: 'Conseils Santé', icon: '❤️' },
+                { name: 'Notre Équipe', icon: '👥' },
+            ],
+            opticien: [
+                { name: 'Tarifs Verres & Montures', icon: '💰' },
+                { name: 'Nos Marques', icon: '🕶️' },
+                { name: 'Offre 2ème paire', icon: '🎁' },
+                { name: 'Remboursements', icon: '📋' },
+            ],
+            pharmacie: [
+                { name: 'Pharmacies de Garde', icon: '🌙' },
+                { name: 'Conseils Santé', icon: '❤️' },
+                { name: 'Promotions du mois', icon: '🎁' },
+                { name: 'Nos Services', icon: '✨' },
+            ],
+            beaute: [
+                { name: 'Carte des Soins', icon: '💰' },
+                { name: 'Nos Soins Visage', icon: '✨' },
+                { name: 'Forfait Détente', icon: '🎁' },
+                { name: 'Nos Produits', icon: '🧴' },
+            ],
+            kine: [
+                { name: 'Tarifs & Remboursements', icon: '💰' },
+                { name: 'Exercices Maison', icon: '🏋️' },
+                { name: 'Conseils Posture', icon: '🧘' },
+                { name: 'Notre Équipe', icon: '👥' },
+            ]
+        };
+
+        const defaultNames = {
+            dentiste: 'Cabinet Dentaire Martin',
+            coiffeur: 'Salon de Coiffure Marie',
+            garage: 'Garage Dupont',
+            veterinaire: 'Clinique Vétérinaire des Chênes',
+            medecin: 'Cabinet Médical Dr. Bernard',
+            opticien: 'Optique Vision Plus',
+            pharmacie: 'Pharmacie Centrale',
+            beaute: 'Institut Beauté & Bien-être',
+            kine: 'Cabinet de Kinésithérapie'
+        };
+
+        // Initialisation
+        function init() {
+            loadState();
+            setupTypeSelector();
+            setupEmojiPicker();
+            renderDocuments();
+            updatePreview();
+        }
+
+        // Charger l'état depuis localStorage
+        function loadState() {
+            const saved = localStorage.getItem('numerimag_admin_demo');
+            if (saved) {
+                state = JSON.parse(saved);
+                document.getElementById('businessName').value = state.businessName;
+                if (state.logo) {
+                    showLogoPreview(state.logo, 'Logo enregistré', '');
+                }
+            } else {
+                document.getElementById('businessName').value = state.businessName;
+            }
+        }
+
+        // Sauvegarder l'état
+        function saveState() {
+            localStorage.setItem('numerimag_admin_demo', JSON.stringify(state));
+            showSaveIndicator();
+        }
+
+        function showSaveIndicator() {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => indicator.classList.remove('show'), 2000);
+        }
+
+        // Type selector
+        function setupTypeSelector() {
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                if (btn.dataset.type === state.type) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+                
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const newType = btn.dataset.type;
+                    state.type = newType;
+                    state.logoEmoji = typeEmojis[newType];
+                    state.businessName = defaultNames[newType];
+                    state.documents = defaultDocuments[newType].map((doc, i) => ({
+                        id: i + 1,
+                        name: doc.name,
+                        icon: doc.icon,
+                        file: null
+                    }));
+                    nextDocId = state.documents.length + 1;
+                    
+                    document.getElementById('businessName').value = state.businessName;
+                    renderDocuments();
+                    updatePreview();
+                    saveState();
+                });
+            });
+        }
+
+        // Emoji picker
+        function setupEmojiPicker() {
+            const grid = document.getElementById('emojiGrid');
+            emojis.forEach(emoji => {
+                const btn = document.createElement('button');
+                btn.className = 'emoji-btn';
+                btn.textContent = emoji;
+                btn.onclick = () => selectEmoji(emoji);
+                grid.appendChild(btn);
+            });
+        }
+
+        function openEmojiPicker(docId) {
+            currentEmojiTarget = docId;
+            document.getElementById('emojiPicker').classList.add('active');
+            document.getElementById('emojiOverlay').classList.add('active');
+        }
+
+        function closeEmojiPicker() {
+            document.getElementById('emojiPicker').classList.remove('active');
+            document.getElementById('emojiOverlay').classList.remove('active');
+            currentEmojiTarget = null;
+        }
+
+        function selectEmoji(emoji) {
+            if (currentEmojiTarget !== null) {
+                const doc = state.documents.find(d => d.id === currentEmojiTarget);
+                if (doc) {
+                    doc.icon = emoji;
+                    renderDocuments();
+                    updatePreview();
+                    saveState();
+                }
+            }
+            closeEmojiPicker();
+        }
+
+        // Logo upload
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (file.size > 2 * 1024 * 1024) {
+                alert('Le fichier est trop volumineux. Maximum 2MB.');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                state.logo = e.target.result;
+                showLogoPreview(e.target.result, file.name, formatFileSize(file.size));
+                updatePreview();
+                saveState();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function showLogoPreview(src, name, size) {
+            document.getElementById('logoUpload').style.display = 'none';
+            document.getElementById('logoPreview').style.display = 'flex';
+            document.getElementById('logoPreviewImg').src = src;
+            document.getElementById('logoPreviewName').textContent = name;
+            document.getElementById('logoPreviewSize').textContent = size;
+        }
+
+        function removeLogo() {
+            state.logo = null;
+            document.getElementById('logoUpload').style.display = 'block';
+            document.getElementById('logoPreview').style.display = 'none';
+            document.getElementById('logoUpload').querySelector('input').value = '';
+            updatePreview();
+            saveState();
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        // Documents
+        function renderDocuments() {
+            const container = document.getElementById('documentsList');
+            container.innerHTML = state.documents.map(doc => `
+                <div class="document-item" data-id="${doc.id}">
+                    <button class="document-icon-btn" onclick="openEmojiPicker(${doc.id})">${doc.icon}</button>
+                    <div class="document-info">
+                        <input type="text" value="${doc.name}" placeholder="Nom du document" onchange="updateDocName(${doc.id}, this.value)">
+                        <div class="document-file">
+                            ${doc.file ? `<a href="#">${doc.file.name}</a>` : 'Aucun fichier'}
+                        </div>
+                    </div>
+                    <div class="document-actions">
+                        <label class="document-action document-action-upload" title="Uploader PDF">
+                            <input type="file" accept=".pdf" style="display:none" onchange="handleDocUpload(${doc.id}, event)">
+                            📎
+                        </label>
+                        <button class="document-action document-action-delete" onclick="deleteDocument(${doc.id})" title="Supprimer">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addDocument() {
+            state.documents.push({
+                id: nextDocId++,
+                name: 'Nouveau document',
+                icon: '📄',
+                file: null
+            });
+            renderDocuments();
+            updatePreview();
+            saveState();
+        }
+
+        function deleteDocument(id) {
+            state.documents = state.documents.filter(d => d.id !== id);
+            renderDocuments();
+            updatePreview();
+            saveState();
+        }
+
+        function updateDocName(id, name) {
+            const doc = state.documents.find(d => d.id === id);
+            if (doc) {
+                doc.name = name;
+                updatePreview();
+                saveState();
+            }
+        }
+
+        function handleDocUpload(id, event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const doc = state.documents.find(d => d.id === id);
+            if (doc) {
+                doc.file = { name: file.name };
+                renderDocuments();
+                saveState();
+            }
+        }
+
+        // Update preview
+        function updatePreview() {
+            state.businessName = document.getElementById('businessName').value || defaultNames[state.type];
+            
+            // Update preview logo
+            const previewLogo = document.getElementById('previewLogo');
+            if (state.logo) {
+                previewLogo.innerHTML = `<img src="${state.logo}" alt="Logo">`;
+            } else {
+                previewLogo.innerHTML = state.logoEmoji || typeEmojis[state.type];
+            }
+            
+            // Update texts
+            document.getElementById('previewBusinessName').textContent = state.businessName;
+            document.getElementById('previewWelcome').textContent = 'Bienvenue chez ' + state.businessName;
+            
+            // Update URL
+            const url = `numerimag.be/kiosk.html?type=${state.type}&business=${encodeURIComponent(state.businessName)}`;
+            document.getElementById('previewUrl').textContent = url;
+            
+            // Update documents preview
+            const docsContainer = document.getElementById('previewDocuments');
+            docsContainer.innerHTML = state.documents.slice(0, 4).map(doc => `
+                <div class="preview-doc-card">
+                    <div class="preview-doc-icon">${doc.icon}</div>
+                    <div class="preview-doc-name">${doc.name}</div>
+                </div>
+            `).join('');
+            
+            saveState();
+        }
+
+        // Open kiosk preview
+        function openPreview() {
+            const url = `kiosk.html?type=${state.type}&business=${encodeURIComponent(state.businessName)}`;
+            window.open(url, '_blank');
+        }
+
+        // Init
+        init();
+    </script>
+</body>
+</html>
